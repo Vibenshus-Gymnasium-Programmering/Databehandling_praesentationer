@@ -1,0 +1,5 @@
+Dette repo indeholder en række præsentationer omkring *databehandling og plot af data* udviklet vha forskellige biblioteker som f.eks. =matplotlib=. Man kan finde de enkelte præsentationer i de forskellige mapper og så vælge org-filen, eller man kan klikke på linkene nedenfor.
+
+Indtil videre er der følgende præsentationer:
+
+- 

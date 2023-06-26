@@ -1,0 +1,6 @@
+#+title: Databehandling med python
+#+options: toc:nil timestamp:nil ^:{}
+
+* Introduktion
+De følgende præsentationer omhandlende databehandling i =python= tager udgangspunkt i datasættet [[./Afkoeling_af_kaffe_nul_grader_udenfor.csv][Afkoeling_af_kaffe_nul_grader_udenfor.csv]] som stammer fra matematikprojektet [[https://github.com/jacobdebel/matematikprojekter/blob/d8a2aade0e8c4f5599e5eab88df38a86f0d59947/Eksponentialfunktioner_Projekt_VibensKaffehus/Projekt_Vibens-KAFFE-hus.pdf][Vibens-kaffe-hus]]. Projektet omhandler databehandling og matematisk modellering af afkøling af kaffe. 
+
