@@ -1,0 +1,2 @@
+#+title: Plot af data - Matplotlib, seaborn, pyqtgraph, Bokeh og plotly
+#+options: toc:nil timestamp:nil ^:{}

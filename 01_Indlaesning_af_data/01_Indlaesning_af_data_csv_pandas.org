@@ -1,0 +1,274 @@
+#+title: Indlæsning af data - CSV og Pandas
+#+options: toc:nil timestamp:nil ^:{}
+
+* Introduktion
+Denne præsentation vil først introducere brugen af det indbyggede bibliotek =csv= til at indlæse data fra en csv-fil (eller en anden vilkårlig tekstfil). Efterfølgende introduceres brugen af =pandas= også. Det skal bemærkes at =pandas= er et meget større bibliotek end =csv= og kræver installation ved hjælp af =pip=. For simple datafiler kan =csv= være at foretrække. 
+
+* Indlæsning af data vha csv 
+
+[[./img/csv_mouse.jpeg]]
+
+=csv= er et indbygget bibliotek i pythons standardinstallation. Det er småt men hurtigt. :)
+
+For at kunne forstå, hvordan =csv= fungerer, tager vi det lige i små bidder. Først skal vi finde ud af, hvordan =csv= kan åbne filer, og vi skal se, hvordan datastrukturen ser ud.
+
+** Simpel indlæsning af datafil
+I den følgende kodestump ses det, hvordan csv-biblioteket anvendes sammen med *context manageren* =with=.
+
+Programmet fungerer på følgende måde. Først importeres =csv=. Efterfølgende åbnes den ønskede datafil (=Afkoeling_af_kaffe_nul_grader_udenfor.csv=). Dette gøres sammen med =with=, som sørger for at åbne og lukke selve filen på korrekt vis. Den sidste del =as datafil= angiver et variabelnavn til selve filen. Man kunne have skrevet hvad som helst i stedet for =datafil=. På næste linje oprettes en csv-læser. En csv-læser understøtter =iterator=-protokollen og returnere en linje ad gangen fra datafilen. Læg mærke til ~delimiter = ","~. Dette specificerer at data på hver linje er adskilt med et komma. Hvis ens datafil er sat op på en anden måde, skal man sørge for at rette dette til. =For=-løkken printer indholdet fra =csv_laeser=, hver gang der itereres over denne.
+
+/Hvis I selv skal kunne køre koden skal I kopiere koden ind i jeres favoriteditor og sørge for at have datafilen liggende i samme mappe som pythonfilen./
+
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle indlaes_med_csv_simpel.py
+import csv
+
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    for linje in csv_laeser:
+        print(linje)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+['# tid(min) ', ' temp (grader Celcius)']
+['0.00 ', ' 90.10']
+['1.00 ', ' 87.73']
+['2.00 ', ' 85.62']
+['3.00 ', ' 83.44']
+...
+...
+['178.00 ', ' 1.00']
+['179.00 ', ' 0.99']
+['180.00 ', ' 1.05']
+#+end_example
+
+Ud fra outputtet kan det ses, at der er flere ting, som skal gøres før end data kan bruges til plot. For det første ses det, at =csv_laeser= returnerer en =liste= af =strenge= (med to elementer i i dette tilfælde), og den første linje angiver blot datafilens struktur. Denne første linje kan derfor ikke bruges til at plotte. *For at gøre vores program brugbart skal vi altså have sorteret den første linje fra og vi skal have konverteret dataværdierne fra =strenge= til =floats= (decimaltal).
+
+** Indlæsning samt konvertering
+Lad os se på en ændret version af vores kode, som sørger for at fjerne første linje og konvertere resten af linjerne til =floats=. Der er flere måder at gøre dette på, så der kommer lige nogle forskellige eksempler.
+
+*Det første eksempel* opretter to nye lister, som skal gemme tider og temperaturer som floats. Der anvendes direkte udpakning af lister.
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle indlaes_med_csv_konvertering_til_floats.py
+import csv
+
+tider = [] # Liste som skal indeholde alle tider i float
+temperaturer = [] # Liste som skal indeholde alle temperaturer i float
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        tid, temperatur = linje  # listen linje udpakkes
+        tid, temperatur = float(tid), float(temperatur)  # konvertering til floats
+        tider.append(tid) # Tilføjer den nuværende tid til enden af listen tider
+        temperaturer.append(temperatur) # Tilføjer den nuværende temperatur til enden af listen temperaturer
+
+print(tider)
+print(temperaturer)
+#+end_src
+
+*Det andet eksempel* anvender funktionen =map= til at konvertere alle elementer i listen =linje= til =floats=. Resultatet er det samme som før. Vi ender op med to forskellige lister som indeholder hhv tider og temperaturer i =floats=.
+
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle indlaes_med_csv_konvertering_til_floats_med_map.py
+import csv
+
+tider = []  # Liste som skal indeholde alle tider i float
+temperaturer = []  # Liste som skal indeholde alle temperaturer i float
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # map kører funktionen float på alle elementer i linje.
+        # list sørger for at gøre det til en liste med floats i.
+        # listen indhold udpakkes til variablerne tid og temperatur
+        tid, temperatur = list(map(float, linje))
+
+        # tid tilføjes til enden af listen tider
+        tider.append(tid)
+        # temperatur tilføjes til enden af listen temperaturer
+        temperaturer.append(temperatur)
+print(tider)
+print(temperaturer)
+#+end_src
+
+*Det tredje eksempel* anvender =list comprehensions=. List comprehensions anses for at være *meget* pythonistiske, og anvendes hyppigt blandt pythonudviklere. :)
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle indlaes_med_csv_konvertering_til_floats_med_list_comprehensions.py
+import csv
+
+tider = []  # Liste som skal indeholde alle tider i float
+temperaturer = []  # Liste som skal indeholde alle temperaturer i float
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # På højre side af lighedstegnet anvendes en list comprehension
+        # hvor hvert element omdannes til float
+        # På venstre side udpakkes den nye liste til variablerne tid og temperatur
+        tid, temperatur = [float(element) for element in linje]
+
+        # Tid og temperatur tilføjes til listerne tider og temperaturer
+        tider.append(tid)
+        temperaturer.append(temperatur)
+
+print(tider)
+print(temperaturer)
+#+end_src
+
+Lige gyldig hvilken tilgang, der vælges, er resultatet to lister, som indeholder tider og temperaturer. Disse lister kommer vi til at bruge senere, når vi skal plotte data.
+
+*** Opgave
+- Find et interessant datasæt på [[https://data.fivethirtyeight.com/]].
+- Indlæs datasættet vha =csv= og generer lister over de mest relevante kolonner, som kan bruges til senere plot. Hvis datasættet er *meget stort* så brug =generatorer= i stedet for lister. Se mere om dette i næste afsnit.
+
+** Intermezzo - list comprehensions og generatorer
+
+Når nu list comprehensions er så vigtige for pythonudviklere, så må vi hellere se lidt nærmere på dem. Her kommer der en række eksempler.
+
+#+begin_src python -n :exports both :results output :eval never-export
+tretabellen = [3*i for i in range(1,11)]
+print(f"tretabellen: {tretabellen}")
+bumleg_med_tretabellen = [i if i%3 else "bum" for i in range(1,31)]
+print(f"bumleg: {bumleg_med_tretabellen}")
+#+end_src
+
+#+RESULTS:
+#+begin_example
+tretabellen: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+bumleg: [1, 2, 'bum', 4, 5, 'bum', 7, 8, 'bum', 10, 11, 'bum', 13, 14, 'bum', 16, 17, 'bum', 19, 20, 'bum', 22, 23, 'bum', 25, 26, 'bum', 28, 29, 'bum']
+#+end_example
+
+List comprehensions vil fungere i langt de fleste tilfælde, men der kan opstå problemer, hvis listerne bliver *meget* lange. Det er f.eks. ikke noget problem at finde summen af de første 1 000 000 heltal.
+
+#+begin_src python -n :exports both :results output :eval never-export
+print(sum([i for i in range(1000000)]))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+499999500000
+#+end_example
+
+*Men undlad at prøve med 10 000 000 eller højere!* Listen kommer til at indholde 10 000 000 elementer, som alle skal holdes i computerens hukommelse på en gang.
+
+#+begin_src python -n :exports both :results output :eval never-export
+# Don't do this!!!
+# print(sum([i for i in range(100000000)]))
+#+end_src
+
+Hvis man stadig gerne vil finde summen af alle heltal op til 10 000 000, kan man anvende =generators= i stedet for. I dette tilfælde skal man blot udskifte de kantede parenteser med almindelige parenteser.
+
+#+begin_src python -n :exports both :results output :eval never-export
+# Dette må man gerne!
+print(sum((i for i in range(100000000))))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+4999999950000000
+#+end_example
+
+En generator gemmer *ikke* alle elementer på én gang, men genererer et nyt element, hver gang det skal bruges, og slutter så til sidst. Fordelen ved en generator er, at den ikke fylder noget særligt i hukommelsen, da elementerne dannes løbende. Til gengæld er bagdelen ved en generator, at den kun kan anvendes/gennemløbes én gang. I det næste eksempel sammenlignes en liste med en generator.
+
+#+begin_src python -n :exports both :results output :eval never-export
+liste_med_de_foeste_10_heltal = [i for i in range(1,11)]
+print(f"Summen af de første 10 heltal vha en liste: {sum(liste_med_de_foeste_10_heltal)}")
+print(f"Summen af de første 10 heltal vha en liste: {sum(liste_med_de_foeste_10_heltal)}")
+generator_med_de_foeste_10_heltal = (i for i in range(1,11))
+print(f"Summen af de første 10 heltal vha en generator: {sum(generator_med_de_foeste_10_heltal)}")
+print(f"Summen af de første 10 heltal vha en generator: {sum(generator_med_de_foeste_10_heltal)}")
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Summen af de første 10 heltal vha en liste: 55
+Summen af de første 10 heltal vha en liste: 55
+Summen af de første 10 heltal vha en generator: 55
+Summen af de første 10 heltal vha en generator: 0
+#+end_example
+
+Det kan altså ses, at listen kan bruges igen og igen, men generatoren er "tom" efter første gennemløb.
+
+*** Opgaver
+1. Dan en liste over alle heltal mellem 1 og 1000 som 8 går op i.
+2. Dan en liste over alle heltal mellem 1 og 1000 som indeholder mindst ét 4-tal.
+3. Dan en liste over alle heltal mellem 1 og 50, hvor alle ulige numre skal have negativt fortegn.
+4. Dan en generator, som kan bruges til at finde summen af kvadraterne (tallene i anden) på alle heltal op til 1 000 000 000 (1 mia).
+
+
+** Indlæsning vha =DictReader=
+=csv=​-biblioteket har også et objekt kaldet =DictReader=, hvis man bedre kan lide at arbejde med dictionaries (det hedder ordbøger på dansk, men det er ikke så nemt at søge efter på internettet).
+
+I det følgende eksempel oprettes der et =dict= kaldet =data= med nøglerne ="Tid"= og ="Temperatur"= og lister som tilhørende værdier. I stedet for at gemme to lister separat er de to lister gemt i dictionariet =data=.
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle indlaes_med_csv_dictreader.py
+import csv
+
+data = {"Tid": [], "Temperatur": []}
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.DictReader(datafil, fieldnames = ("Tid", "Temperatur"))
+    next(csv_laeser)
+    for linje in csv_laeser:
+        data["Tid"].append(float(linje["Tid"]))
+        data["Temperatur"].append(float(linje["Temperatur"]))
+print(data["Tid"])
+print(data["Temperatur"])
+#+end_src
+
+*Note:* Hvis headerlinjen i den csv-fil, man anvender, er sat fornuftigt op, så kan man undlade at anvende parameteren =fieldnames=. I stedet vil den første linje i csv-filen bruges til at læse nøglerne (dem som ellers er angivet i =fieldnames=).
+
+Hvis vores csv-fil så ud som det følgende:
+
+#+begin_example
+Tid, Temperatur
+0.00 , 90.10
+1.00 , 87.73
+2.00 , 85.62
+...
+...
+178.00 , 1.00
+179.00 , 0.99
+180.00 , 1.05
+#+end_example
+
+så ville det forrige eksempel kunne skrives som det følgende:
+#+begin_src python -n :exports both :results none :eval never-export :comments link :tangle indlaes_med_csv_dictreader_ny_header.py
+import csv
+
+data = {"Tid": [], "Temperatur": []}
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.DictReader(datafil)
+    for linje in csv_laeser:
+        data["Tid"].append(float(linje["Tid"]))
+        data["Temperatur"].append(float(linje["Temperatur"]))
+print(data["Tid"])
+print(data["Temperatur"])
+#+end_src
+
+   
+* INPROGRESS Indlæsning af data vha pandas
+
+[[./img/pandas_panda.jpeg]]
+
+=Pandas= er et stort databehandlingsbibliotek, som anvendes i stor stil inden for alle områder, som på en eller anden måde skal håndtere store datamængder. I modsætning til =csv= skal =pandas= installeres ved hjælp af =pip=. Som altid er det en god idé at arbejde i et virtuelt miljø, så =pandas= kun bliver installeret lokalt der. Anvend pycharm til at oprette et virtuelt miljø, hvis det ikke allerede er gjort, og installer efterfølgende pandas igennem pycharm. I har prøvet det tidligere med både arcade og pyside6. Alternativt kan I anvende en terminal og oprette virtuelle miljøer og installere pandas vha pip. Dette kan I også finde en guide til i vores tidligere undervisningsmateriale.
+
+
+Lad os nu indlæse vores csv-fil over kaffetemperaturen ved hjælp af =pandas=.
+
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle indlaes_med_pandas.py
+import pandas
+
+# df står for dataframe
+df = pandas.read_csv("Afkoeling_af_kaffe_nul_grader_udenfor.csv")
+# Omdøber kolonnerne til Tider og Temperaturer
+df.columns = ["Tider", "Temperaturer"]
+# Det kan ses, at tider og temp allerede er konverteret til floats
+print(df.dtypes)
+# Man kan få fat i kolonnerne på samme måde som i et dictionary
+print(df["Tider"])
+print(df["Temperaturer"])
+#+end_src
+
+=Pandas= kan så utroligt mange flere ting, men vi holder os bare til det fundamentale.
+
+Nu har I set flere forskellige måder at få gjort data klar. Nu skal vi se nærmere på plot af data. Gå til den præsentation. Linket kan I finde i næste afsnit.
+
+* Andre præsentationer
+[[../00_Introduktion_til_datasaet/00_Introduktion.org][Forrige præsentation]] omhandlede præsentationen af det anvendte datasæt, mens den [[../02_Plot_af_data/02_Plot_af_data.org][næste præsentation]] omhandler plot af data ved hjælp af forskellige biblioteker til netop dette.

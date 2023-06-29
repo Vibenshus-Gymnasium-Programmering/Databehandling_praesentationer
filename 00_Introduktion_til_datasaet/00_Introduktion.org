@@ -2,5 +2,40 @@
 #+options: toc:nil timestamp:nil ^:{}
 
 * Introduktion
-De følgende præsentationer omhandlende databehandling i =python= tager udgangspunkt i datasættet [[./Afkoeling_af_kaffe_nul_grader_udenfor.csv][Afkoeling_af_kaffe_nul_grader_udenfor.csv]] som stammer fra matematikprojektet [[https://github.com/jacobdebel/matematikprojekter/blob/d8a2aade0e8c4f5599e5eab88df38a86f0d59947/Eksponentialfunktioner_Projekt_VibensKaffehus/Projekt_Vibens-KAFFE-hus.pdf][Vibens-kaffe-hus]]. Projektet omhandler databehandling og matematisk modellering af afkøling af kaffe. 
+De følgende præsentationer omhandlende databehandling i =python= tager udgangspunkt i datasættet [[./Afkoeling_af_kaffe_nul_grader_udenfor.csv][Afkoeling_af_kaffe_nul_grader_udenfor.csv]] som stammer fra matematikprojektet [[./Projekt_Vibens-KAFFE-hus.pdf][Vibens-Kaffe-Hus]]. Projektet omhandler databehandling og matematisk modellering af afkøling af kaffe. 
 
+Datasættet er gemt i en =csv-fil= indeholdende en =header=​-linje samt 181 datapunkter, hvor tid og temperatur er adskilt med et komma. Et udsnit af datafilen kan ses nedenfor.
+
+#+begin_example
+# tid(min) , temp (grader Celcius)
+0.00 , 90.10
+1.00 , 87.73
+2.00 , 85.62
+3.00 , 83.44
+4.00 , 81.37
+...
+...
+178.00 , 1.00
+179.00 , 0.99
+180.00 , 1.05
+#+end_example
+
+* Plot af datasættet
+Datasættet kan plottes i et almindeligt regneark (excel, libreoffice calc eller lignende), og ser i sin rene form ud på følgende måde.
+
+[[./img/libreoffice_plot.png]]
+
+Pointen med hele dette forløb om databehandling i python, er at kunne skabe det samme plot (og mere til) ved hjælp af python.
+
+* Opgave
+Som den første opgave skal I gøre jer fortrolige med datasættet. Derfor skal I gøre følgende:
+
+- Download csv-filen med datasættet vha. linket i starten af denne præsentation.
+- csv-filen er blot en ren tekstfil, selvom den ender på csv. *Åbn csv-filen i en simpel teksteditor, som f.eks. =notesblok=, =vim=, =emacs=, etc eller måske i jeres pythoneditor pycharm eller lignende*. I skal bare kunne se, at der er tale om en simpelt tekstfil.
+- Åbn nu jeres favorit regneark (excel, libreoffice calc eller lignende) og *åbn/importer csv-filen, så den læses korrekt*. Dette kan kræve mange forsøg og læsning af dokumentation, men det er jer, som skal finde ud af det.
+- Opret selv et tilsvarende plot af datapunkterne som det viste. Gør det så pænt som muligt.
+- Plot datapunkterne som i forrige punkt, men i henholdsvis *et enkelt- og et dobbeltlogaritmisk koordinatsystem*. (Hvis det dobbeltlogaritmiske koordinatsystem ikke kan vises, så fjern eventuelt det første datapunkt.)
+
+  
+* Næste præsentation
+Inden data kan plottes, skal det lige indlæses. Næste præsentation omhandler derfor indlæsning af data ved hjælp af henholdsvis bibliotekerne =csv= og =pandas=. Finde præsentationen her: [[../01_Indlaesning_af_data/01_Indlaesning_af_data_csv_pandas.org][Indlæsning af data - CSV og Pandas]].

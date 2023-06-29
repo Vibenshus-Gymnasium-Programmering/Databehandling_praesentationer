@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="da" xml:lang="da">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Indlæsning af data - CSV og Pandas</title>
+<meta name="author" content="Jacob Debel" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Indlæsning af data - CSV og Pandas</h1>
+
+<div id="outline-container-org48f75a6" class="outline-2">
+<h2 id="org48f75a6">Introduktion</h2>
+<div class="outline-text-2" id="text-org48f75a6">
+<p>
+Denne præsentation vil først introducere brugen af det indbyggede bibliotek <code>csv</code> til at indlæse data fra en csv-fil (eller en anden vilkårlig tekstfil). Efterfølgende introduceres brugen af <code>pandas</code> også. Det skal bemærkes at <code>pandas</code> er et meget større bibliotek end <code>csv</code> og kræver installation ved hjælp af <code>pip</code>. For simple datafiler kan <code>csv</code> være at foretrække. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6db6e52" class="outline-2">
+<h2 id="org6db6e52">Indlæsning af data vha csv</h2>
+<div class="outline-text-2" id="text-org6db6e52">
+<p>
+For at kunne forstå, hvordan <code>csv</code> fungerer, tager vi det lige i små bidder. Først skal vi finde ud af, hvordan <code>csv</code> kan åbne filer, og vi skal se, hvordan datastrukturen ser ud.
+</p>
+</div>
+
+<div id="outline-container-org32b0d2b" class="outline-3">
+<h3 id="org32b0d2b">Simpel indlæsning af datafil</h3>
+<div class="outline-text-3" id="text-org32b0d2b">
+<p>
+I den følgende kodestump ses det, hvordan csv-biblioteket anvendes sammen med <b>context manageren</b> <code>with</code>.
+</p>
+
+<p>
+Programmet fungerer på følgende måde. Først importeres <code>csv</code>. Efterfølgende åbnes den ønskede datafil (<code>Afkoeling_af_kaffe_nul_grader_udenfor.csv</code>). Dette gøres sammen med <code>with</code>, som sørger for at åbne og lukke selve filen på korrekt vis. Den sidste del <code>as datafil</code> angiver et variabelnavn til selve filen. Man kunne have skrevet hvad som helst i stedet for <code>datafil</code>. På næste linje oprettes en csv-læser. En csv-læser understøtter <code>iterator</code>-protokollen og returnere en linje ad gangen fra datafilen. Læg mærke til <code>delimiter = ","</code>. Dette specificerer at data på hver linje er adskilt med et komma. Hvis ens datafil er sat op på en anden måde, skal man sørge for at rette dette til. <code>For</code>-løkken printer indholdet fra <code>csv_laeser</code>, hver gang der itereres over denne.
+</p>
+
+<p>
+<i>Hvis I selv skal kunne køre koden skal I kopiere koden ind i jeres favoriteditor og sørge for at have datafilen liggende i samme mappe som pythonfilen.</i>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> csv
+<span class="linenr">2: </span>
+<span class="linenr">3: </span><span style="color: #b6a0ff;">with</span> <span style="color: #f78fe7;">open</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Afkoeling_af_kaffe_nul_grader_udenfor.csv"</span><span style="color: #ffffff;">)</span> <span style="color: #b6a0ff;">as</span> <span style="color: #00d3d0;">datafil</span>:
+<span class="linenr">4: </span>    csv_laeser = csv.reader<span style="color: #ffffff;">(</span>datafil, delimiter=<span style="color: #79a8ff;">","</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>    <span style="color: #b6a0ff;">for</span> linje <span style="color: #b6a0ff;">in</span> csv_laeser:
+<span class="linenr">6: </span>        <span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>linje<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org771f4c0">
+['# tid(min) ', ' temp (grader Celcius)']
+['0.00 ', ' 90.10']
+['1.00 ', ' 87.73']
+['2.00 ', ' 85.62']
+['3.00 ', ' 83.44']
+...
+...
+['178.00 ', ' 1.00']
+['179.00 ', ' 0.99']
+['180.00 ', ' 1.05']
+</pre>
+
+<p>
+Ud fra outputtet kan det ses, at der er flere ting, som skal gøres før end data kan bruges til plot. For det første ses det, at <code>csv_laeser</code> returnerer en <code>liste</code> af <code>strenge</code> (med to elementer i i dette tilfælde), og den første linje angiver blot datafilens struktur. Denne første linje kan derfor ikke bruges til at plotte. *For at gøre vores program brugbart skal vi altså have sorteret den første linje fra og vi skal have konverteret dataværdierne fra <code>strenge</code> til <code>floats</code> (decimaltal).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd4fd12c" class="outline-3">
+<h3 id="orgd4fd12c">Indlæsning samt konvertering</h3>
+<div class="outline-text-3" id="text-orgd4fd12c">
+<p>
+Lad os se på en ændret version af vores kode, som sørger for at fjerne første linje og konvertere resten af linjerne til <code>floats</code>. Der er flere måder at gøre dette på, så der kommer lige nogle forskellige eksempler.
+</p>
+
+<p>
+<b>Det første eksempel</b> opretter to nye lister, som skal gemme tider og temperaturer som floats. Der anvendes direkte udpakning af lister.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> csv
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">tider</span> = <span style="color: #ffffff;">[]</span> <span style="color: #989898;"># </span><span style="color: #989898;">Liste som skal indeholde alle tider i float</span>
+<span class="linenr"> 4: </span><span style="color: #00d3d0;">temperaturer</span> = <span style="color: #ffffff;">[]</span> <span style="color: #989898;"># </span><span style="color: #989898;">Liste som skal indeholde alle temperaturer i float</span>
+<span class="linenr"> 5: </span><span style="color: #b6a0ff;">with</span> <span style="color: #f78fe7;">open</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Afkoeling_af_kaffe_nul_grader_udenfor.csv"</span><span style="color: #ffffff;">)</span> <span style="color: #b6a0ff;">as</span> <span style="color: #00d3d0;">datafil</span>:
+<span class="linenr"> 6: </span>    csv_laeser = csv.reader<span style="color: #ffffff;">(</span>datafil, delimiter=<span style="color: #79a8ff;">","</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span>    <span style="color: #f78fe7;">next</span><span style="color: #ffffff;">(</span>csv_laeser<span style="color: #ffffff;">)</span>  <span style="color: #989898;"># </span><span style="color: #989898;">Springer f&#248;rste linje over</span>
+<span class="linenr"> 8: </span>    <span style="color: #b6a0ff;">for</span> linje <span style="color: #b6a0ff;">in</span> csv_laeser:
+<span class="linenr"> 9: </span>        tid, temperatur = linje  <span style="color: #989898;"># </span><span style="color: #989898;">listen linje udpakkes</span>
+<span class="linenr">10: </span>        tid, temperatur = <span style="color: #f78fe7;">float</span><span style="color: #ffffff;">(</span>tid<span style="color: #ffffff;">)</span>, <span style="color: #f78fe7;">float</span><span style="color: #ffffff;">(</span>temperatur<span style="color: #ffffff;">)</span>  <span style="color: #989898;"># </span><span style="color: #989898;">konvertering til floats</span>
+<span class="linenr">11: </span>        tider.append<span style="color: #ffffff;">(</span>tid<span style="color: #ffffff;">)</span> <span style="color: #989898;"># </span><span style="color: #989898;">Tilf&#248;jer den nuv&#230;rende tid til enden af listen tider</span>
+<span class="linenr">12: </span>        temperaturer.append<span style="color: #ffffff;">(</span>temperatur<span style="color: #ffffff;">)</span> <span style="color: #989898;"># </span><span style="color: #989898;">Tilf&#248;jer den nuv&#230;rende temperatur til enden af listen temperaturer</span>
+<span class="linenr">13: </span>
+<span class="linenr">14: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>tider<span style="color: #ffffff;">)</span>
+<span class="linenr">15: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>temperaturer<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<p>
+<b>Det andet eksempel</b> anvender funktionen <code>map</code> til at konvertere alle elementer i listen <code>linje</code> til <code>floats</code>. Resultatet er det samme som før. Vi ender op med to forskellige lister som indeholder hhv tider og temperaturer i <code>floats</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> csv
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">tider</span> = <span style="color: #ffffff;">[]</span>  <span style="color: #989898;"># </span><span style="color: #989898;">Liste som skal indeholde alle tider i float</span>
+<span class="linenr"> 4: </span><span style="color: #00d3d0;">temperaturer</span> = <span style="color: #ffffff;">[]</span>  <span style="color: #989898;"># </span><span style="color: #989898;">Liste som skal indeholde alle temperaturer i float</span>
+<span class="linenr"> 5: </span><span style="color: #b6a0ff;">with</span> <span style="color: #f78fe7;">open</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Afkoeling_af_kaffe_nul_grader_udenfor.csv"</span><span style="color: #ffffff;">)</span> <span style="color: #b6a0ff;">as</span> <span style="color: #00d3d0;">datafil</span>:
+<span class="linenr"> 6: </span>    csv_laeser = csv.reader<span style="color: #ffffff;">(</span>datafil, delimiter=<span style="color: #79a8ff;">","</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span>    <span style="color: #f78fe7;">next</span><span style="color: #ffffff;">(</span>csv_laeser<span style="color: #ffffff;">)</span>  <span style="color: #989898;"># </span><span style="color: #989898;">Springer f&#248;rste linje over</span>
+<span class="linenr"> 8: </span>    <span style="color: #b6a0ff;">for</span> linje <span style="color: #b6a0ff;">in</span> csv_laeser:
+<span class="linenr"> 9: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">map k&#248;rer funktionen float p&#229; alle elementer i linje.</span>
+<span class="linenr">10: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">list s&#248;rger for at g&#248;re det til en liste med floats i.</span>
+<span class="linenr">11: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">listen indhold udpakkes til variablerne tid og temperatur</span>
+<span class="linenr">12: </span>        tid, temperatur = <span style="color: #f78fe7;">list</span><span style="color: #ffffff;">(</span><span style="color: #f78fe7;">map</span><span style="color: #ff66ff;">(</span><span style="color: #f78fe7;">float</span>, linje<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr">13: </span>
+<span class="linenr">14: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">tid tilf&#248;jes til enden af listen tider</span>
+<span class="linenr">15: </span>        tider.append<span style="color: #ffffff;">(</span>tid<span style="color: #ffffff;">)</span>
+<span class="linenr">16: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">temperatur tilf&#248;jes til enden af listen temperaturer</span>
+<span class="linenr">17: </span>        temperaturer.append<span style="color: #ffffff;">(</span>temperatur<span style="color: #ffffff;">)</span>
+<span class="linenr">18: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>tider<span style="color: #ffffff;">)</span>
+<span class="linenr">19: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>temperaturer<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<p>
+<b>Det tredje eksempel</b> anvender <code>list comprehensions</code>. List comprehensions anses for at være <b>meget</b> pythonistiske, og anvendes hyppigt blandt pythonudviklere. :)
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> csv
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">tider</span> = <span style="color: #ffffff;">[]</span>  <span style="color: #989898;"># </span><span style="color: #989898;">Liste som skal indeholde alle tider i float</span>
+<span class="linenr"> 4: </span><span style="color: #00d3d0;">temperaturer</span> = <span style="color: #ffffff;">[]</span>  <span style="color: #989898;"># </span><span style="color: #989898;">Liste som skal indeholde alle temperaturer i float</span>
+<span class="linenr"> 5: </span><span style="color: #b6a0ff;">with</span> <span style="color: #f78fe7;">open</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Afkoeling_af_kaffe_nul_grader_udenfor.csv"</span><span style="color: #ffffff;">)</span> <span style="color: #b6a0ff;">as</span> <span style="color: #00d3d0;">datafil</span>:
+<span class="linenr"> 6: </span>    csv_laeser = csv.reader<span style="color: #ffffff;">(</span>datafil, delimiter=<span style="color: #79a8ff;">","</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span>    <span style="color: #f78fe7;">next</span><span style="color: #ffffff;">(</span>csv_laeser<span style="color: #ffffff;">)</span>  <span style="color: #989898;"># </span><span style="color: #989898;">Springer f&#248;rste linje over</span>
+<span class="linenr"> 8: </span>    <span style="color: #b6a0ff;">for</span> linje <span style="color: #b6a0ff;">in</span> csv_laeser:
+<span class="linenr"> 9: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">P&#229; h&#248;jre side af lighedstegnet anvendes en list comprehension</span>
+<span class="linenr">10: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">hvor hvert element omdannes til float</span>
+<span class="linenr">11: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">P&#229; venstre side udpakkes den nye liste til variablerne tid og temperatur</span>
+<span class="linenr">12: </span>        tid, temperatur = <span style="color: #ffffff;">[</span><span style="color: #f78fe7;">float</span><span style="color: #ff66ff;">(</span>element<span style="color: #ff66ff;">)</span> <span style="color: #b6a0ff;">for</span> element <span style="color: #b6a0ff;">in</span> linje<span style="color: #ffffff;">]</span>
+<span class="linenr">13: </span>
+<span class="linenr">14: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">Tid og temperatur tilf&#248;jes til listerne tider og temperaturer</span>
+<span class="linenr">15: </span>        tider.append<span style="color: #ffffff;">(</span>tid<span style="color: #ffffff;">)</span>
+<span class="linenr">16: </span>        temperaturer.append<span style="color: #ffffff;">(</span>temperatur<span style="color: #ffffff;">)</span>
+<span class="linenr">17: </span>
+<span class="linenr">18: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>tider<span style="color: #ffffff;">)</span>
+<span class="linenr">19: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>temperaturer<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<p>
+Lige gyldig hvilken tilgang, der vælges, er resultatet to lister, som indeholder tider og temperaturer. Disse lister kommer vi til at bruge senere, når vi skal plotte data.
+</p>
+</div>
+
+<div id="outline-container-orgf333b79" class="outline-4">
+<h4 id="orgf333b79">Opgave</h4>
+<div class="outline-text-4" id="text-orgf333b79">
+<ul class="org-ul">
+<li>Find et interessant datasæt på <a href="https://data.fivethirtyeight.com/">https://data.fivethirtyeight.com/</a>.</li>
+<li>Indlæs datasættet vha <code>csv</code> og generer lister over de mest relevante kolonner, som kan bruges til senere plot. Hvis datasættet er <b>meget stort</b> så brug <code>generatorer</code> i stedet for lister. Se mere om dette i næste afsnit.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4a3f7a2" class="outline-3">
+<h3 id="org4a3f7a2">Intermezzo - list comprehensions og generatorer</h3>
+<div class="outline-text-3" id="text-org4a3f7a2">
+<p>
+Når nu list comprehensions er så vigtige for pythonudviklere, så må vi hellere se lidt nærmere på dem. Her kommer der en række eksempler.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #00d3d0;">tretabellen</span> = <span style="color: #ffffff;">[</span>3*i <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span><span style="color: #ff66ff;">(</span>1,11<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">]</span>
+<span class="linenr">2: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>f<span style="color: #79a8ff;">"tretabellen: </span>{tretabellen}<span style="color: #79a8ff;">"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span>bumleg_med_tretabellen = <span style="color: #ffffff;">[</span>i <span style="color: #b6a0ff;">if</span> i%3 <span style="color: #b6a0ff;">else</span> <span style="color: #79a8ff;">"bum"</span> <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span><span style="color: #ff66ff;">(</span>1,31<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">]</span>
+<span class="linenr">4: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>f<span style="color: #79a8ff;">"bumleg: </span>{bumleg_med_tretabellen}<span style="color: #79a8ff;">"</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org786840a">
+tretabellen: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+bumleg: [1, 2, 'bum', 4, 5, 'bum', 7, 8, 'bum', 10, 11, 'bum', 13, 14, 'bum', 16, 17, 'bum', 19, 20, 'bum', 22, 23, 'bum', 25, 26, 'bum', 28, 29, 'bum']
+</pre>
+
+<p>
+List comprehensions vil fungere i langt de fleste tilfælde, men der kan opstå problemer, hvis listerne bliver <b>meget</b> lange. Det er f.eks. ikke noget problem at finde summen af de første 1 000 000 heltal.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #f78fe7;">sum</span><span style="color: #ff66ff;">(</span><span style="color: #00eff0;">[</span>i <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span><span style="color: #ff6b55;">(</span>1000000<span style="color: #ff6b55;">)</span><span style="color: #00eff0;">]</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org3dd5a90">
+499999500000
+</pre>
+
+<p>
+<b>Men undlad at prøve med 10 000 000 eller højere!</b> Listen kommer til at indholde 10 000 000 elementer, som alle skal holdes i computerens hukommelse på en gang.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #989898;"># </span><span style="color: #989898;">Don't do this!!!</span>
+<span class="linenr">2: </span><span style="color: #989898;"># </span><span style="color: #989898;">print(sum([i for i in range(100000000)]))</span>
+</pre>
+</div>
+
+<p>
+Hvis man stadig gerne vil finde summen af alle heltal op til 10 000 000, kan man anvende <code>generators</code> i stedet for. I dette tilfælde skal man blot udskifte de kantede parenteser med almindelige parenteser.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #989898;"># </span><span style="color: #989898;">Dette m&#229; man gerne!</span>
+<span class="linenr">2: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #f78fe7;">sum</span><span style="color: #ff66ff;">(</span><span style="color: #00eff0;">(</span>i <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span><span style="color: #ff6b55;">(</span>100000000<span style="color: #ff6b55;">)</span><span style="color: #00eff0;">)</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="orge2e7f2b">
+4999999950000000
+</pre>
+
+<p>
+En generator gemmer <b>ikke</b> alle elementer på én gang, men genererer et nyt element, hver gang det skal bruges, og slutter så til sidst. Fordelen ved en generator er, at den ikke fylder noget særligt i hukommelsen, da elementerne dannes løbende. Til gengæld er bagdelen ved en generator, at den kun kan anvendes/gennemløbes én gang. I det næste eksempel sammenlignes en liste med en generator.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #00d3d0;">liste_med_de_foeste_10_heltal</span> = <span style="color: #ffffff;">[</span>i <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span><span style="color: #ff66ff;">(</span>1,11<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">]</span>
+<span class="linenr">2: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>f<span style="color: #79a8ff;">"Summen af de f&#248;rste 10 heltal vha en liste: </span>{<span style="color: #f78fe7;">sum</span>(liste_med_de_foeste_10_heltal)}<span style="color: #79a8ff;">"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>f<span style="color: #79a8ff;">"Summen af de f&#248;rste 10 heltal vha en liste: </span>{<span style="color: #f78fe7;">sum</span>(liste_med_de_foeste_10_heltal)}<span style="color: #79a8ff;">"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">4: </span>generator_med_de_foeste_10_heltal = <span style="color: #ffffff;">(</span>i <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span><span style="color: #ff66ff;">(</span>1,11<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>f<span style="color: #79a8ff;">"Summen af de f&#248;rste 10 heltal vha en generator: </span>{<span style="color: #f78fe7;">sum</span>(generator_med_de_foeste_10_heltal)}<span style="color: #79a8ff;">"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>f<span style="color: #79a8ff;">"Summen af de f&#248;rste 10 heltal vha en generator: </span>{<span style="color: #f78fe7;">sum</span>(generator_med_de_foeste_10_heltal)}<span style="color: #79a8ff;">"</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="orgae5e67a">
+Summen af de første 10 heltal vha en liste: 55
+Summen af de første 10 heltal vha en liste: 55
+Summen af de første 10 heltal vha en generator: 55
+Summen af de første 10 heltal vha en generator: 0
+</pre>
+
+<p>
+Det kan altså ses, at listen kan bruges igen og igen, men generatoren er "tom" efter første gennemløb.
+</p>
+</div>
+
+<div id="outline-container-org3c1dd34" class="outline-4">
+<h4 id="org3c1dd34">Opgaver</h4>
+<div class="outline-text-4" id="text-org3c1dd34">
+<ol class="org-ol">
+<li>Dan en liste over alle heltal mellem 1 og 1000 som 8 går op i.</li>
+<li>Dan en liste over alle heltal mellem 1 og 1000 som indeholder mindst ét 4-tal.</li>
+<li>Dan en liste over alle heltal mellem 1 og 50, hvor alle ulige numre skal have negativt fortegn.</li>
+<li>Dan en generator, som kan bruges til at finde summen af kvadraterne (tallene i anden) på alle heltal op til 1 000 000 000 (1 mia).</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgfc33887" class="outline-3">
+<h3 id="orgfc33887">Indlæsning vha <code>DictReader</code></h3>
+<div class="outline-text-3" id="text-orgfc33887">
+<p>
+<code>csv</code>​-biblioteket har også et objekt kaldet <code>DictReader</code>, hvis man bedre kan lide at arbejde med dictionaries (det hedder ordbøger på dansk, men det er ikke så nemt at søge efter på internettet).
+</p>
+
+<p>
+I det følgende eksempel oprettes der et <code>dict</code> kaldet <code>data</code> med nøglerne <code>"Tid"</code> og <code>"Temperatur"</code> og lister som tilhørende værdier. I stedet for at gemme to lister separat er de to lister gemt i dictionariet <code>data</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> csv
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">data</span> = <span style="color: #ffffff;">{</span><span style="color: #79a8ff;">"Tid"</span>: <span style="color: #ff66ff;">[]</span>, <span style="color: #79a8ff;">"Temperatur"</span>: <span style="color: #ff66ff;">[]</span><span style="color: #ffffff;">}</span>
+<span class="linenr"> 4: </span><span style="color: #b6a0ff;">with</span> <span style="color: #f78fe7;">open</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Afkoeling_af_kaffe_nul_grader_udenfor.csv"</span><span style="color: #ffffff;">)</span> <span style="color: #b6a0ff;">as</span> <span style="color: #00d3d0;">datafil</span>:
+<span class="linenr"> 5: </span>    csv_laeser = csv.DictReader<span style="color: #ffffff;">(</span>datafil, fieldnames = <span style="color: #ff66ff;">(</span><span style="color: #79a8ff;">"Tid"</span>, <span style="color: #79a8ff;">"Temperatur"</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 6: </span>    <span style="color: #f78fe7;">next</span><span style="color: #ffffff;">(</span>csv_laeser<span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span>    <span style="color: #b6a0ff;">for</span> linje <span style="color: #b6a0ff;">in</span> csv_laeser:
+<span class="linenr"> 8: </span>        data<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"Tid"</span><span style="color: #ffffff;">]</span>.append<span style="color: #ffffff;">(</span><span style="color: #f78fe7;">float</span><span style="color: #ff66ff;">(</span>linje<span style="color: #00eff0;">[</span><span style="color: #79a8ff;">"Tid"</span><span style="color: #00eff0;">]</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 9: </span>        data<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"Temperatur"</span><span style="color: #ffffff;">]</span>.append<span style="color: #ffffff;">(</span><span style="color: #f78fe7;">float</span><span style="color: #ff66ff;">(</span>linje<span style="color: #00eff0;">[</span><span style="color: #79a8ff;">"Temperatur"</span><span style="color: #00eff0;">]</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr">10: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>data<span style="color: #ff66ff;">[</span><span style="color: #79a8ff;">"Tid"</span><span style="color: #ff66ff;">]</span><span style="color: #ffffff;">)</span>
+<span class="linenr">11: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>data<span style="color: #ff66ff;">[</span><span style="color: #79a8ff;">"Temperatur"</span><span style="color: #ff66ff;">]</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<p>
+<b>Note:</b> Hvis headerlinjen i den csv-fil, man anvender, er sat fornuftigt op, så kan man undlade at anvende parameteren <code>fieldnames</code>. I stedet vil den første linje i csv-filen bruges til at læse nøglerne (dem som ellers er angivet i <code>fieldnames</code>).
+</p>
+
+<p>
+Hvis vores csv-fil så ud som det følgende:
+</p>
+
+<pre class="example" id="orgea08c19">
+Tid, Temperatur
+0.00 , 90.10
+1.00 , 87.73
+2.00 , 85.62
+...
+...
+178.00 , 1.00
+179.00 , 0.99
+180.00 , 1.05
+</pre>
+
+<p>
+så ville det forrige eksempel kunne skrives som det følgende:
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> csv
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">data</span> = <span style="color: #ffffff;">{</span><span style="color: #79a8ff;">"Tid"</span>: <span style="color: #ff66ff;">[]</span>, <span style="color: #79a8ff;">"Temperatur"</span>: <span style="color: #ff66ff;">[]</span><span style="color: #ffffff;">}</span>
+<span class="linenr"> 4: </span><span style="color: #b6a0ff;">with</span> <span style="color: #f78fe7;">open</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Afkoeling_af_kaffe_nul_grader_udenfor.csv"</span><span style="color: #ffffff;">)</span> <span style="color: #b6a0ff;">as</span> <span style="color: #00d3d0;">datafil</span>:
+<span class="linenr"> 5: </span>    csv_laeser = csv.DictReader<span style="color: #ffffff;">(</span>datafil<span style="color: #ffffff;">)</span>
+<span class="linenr"> 6: </span>    <span style="color: #b6a0ff;">for</span> linje <span style="color: #b6a0ff;">in</span> csv_laeser:
+<span class="linenr"> 7: </span>        data<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"Tid"</span><span style="color: #ffffff;">]</span>.append<span style="color: #ffffff;">(</span><span style="color: #f78fe7;">float</span><span style="color: #ff66ff;">(</span>linje<span style="color: #00eff0;">[</span><span style="color: #79a8ff;">"Tid"</span><span style="color: #00eff0;">]</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 8: </span>        data<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"Temperatur"</span><span style="color: #ffffff;">]</span>.append<span style="color: #ffffff;">(</span><span style="color: #f78fe7;">float</span><span style="color: #ff66ff;">(</span>linje<span style="color: #00eff0;">[</span><span style="color: #79a8ff;">"Temperatur"</span><span style="color: #00eff0;">]</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 9: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>data<span style="color: #ff66ff;">[</span><span style="color: #79a8ff;">"Tid"</span><span style="color: #ff66ff;">]</span><span style="color: #ffffff;">)</span>
+<span class="linenr">10: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span>data<span style="color: #ff66ff;">[</span><span style="color: #79a8ff;">"Temperatur"</span><span style="color: #ff66ff;">]</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgf4a4ee9" class="outline-2">
+<h2 id="orgf4a4ee9"><span class="todo TODO">TODO</span> Indlæsning af data vha pandas</h2>
+</div>
+
+<div id="outline-container-org8f12f07" class="outline-2">
+<h2 id="org8f12f07">Andre præsentationer</h2>
+<div class="outline-text-2" id="text-org8f12f07">
+<p>
+<a href="../01_Indlaesning_af_data/01_Indlaesning_af_data_csv_pandas.html">Forrige præsentation</a> omhandlede præsentationen af det anvendte datasæt, mens den <a href="../02_Plot_af_data/02_Plot_af_data.html">næste præsentation</a> omhanlder plot af data ved hjælp af forskellige biblioteker til netop dette.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Forfatter: Jacob Debel</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
