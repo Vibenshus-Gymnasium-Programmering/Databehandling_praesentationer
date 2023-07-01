@@ -38,4 +38,4 @@ Som den første opgave skal I gøre jer fortrolige med datasættet. Derfor skal 
 
   
 * Næste præsentation
-Inden data kan plottes, skal det lige indlæses. Næste præsentation omhandler derfor indlæsning af data ved hjælp af henholdsvis bibliotekerne =csv= og =pandas=. Finde præsentationen her: [[../01_Indlaesning_af_data/01_Indlaesning_af_data_csv_pandas.org][Indlæsning af data - CSV og Pandas]].
+Inden data kan plottes, skal det lige indlæses. Næste præsentation omhandler derfor indlæsning af data ved hjælp af henholdsvis bibliotekerne =csv= og =pandas=. Find præsentationen her: [[../01_Indlaesning_af_data/01_Indlaesning_af_data_csv_pandas.org][Indlæsning af data - CSV og Pandas]].

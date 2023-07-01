@@ -1,2 +1,73 @@
-#+title: Plot af data - Matplotlib, seaborn, pyqtgraph, Bokeh og plotly
+#+title: Plot af data - Matplotlib, Plotly og PyQtGraph
 #+options: toc:nil timestamp:nil ^:{}
+
+* Introduktion
+Når det kommer til biblioteker til datavisualisering ved hjælp af python, er der et hav af forskellige muligheder. Her nævnes blot at lille udvalg:
+
+** Matplotlib
+[[./img/matplotlib_logo.png]]
+Har længe været /de facto/-biblioteket, når det har drejet sig om plot af data. Kan producere mange forskellige plots og kan indlejres i mange forskellige grafiske biblioteker, såsom =pyside= og =tkinter=. Standardtemaet ser måske en smule kedeligt ud, men det er blevet nemt hurtigt at ændre det. For nogen kan mængden af nødvendig kode, for at få et godt plot, virke stor, sammenlignet med nogle af de andre biblioteker. Til gengæld har man fuld kontrol over, hvad der skal plottes, og hvor det skal plottes henne.
+
+** Seaborn
+[[./img/seaborn_logo.png]]
+
+Seaborn er et bibliotek, som bygger direkte ovenpå matplotlib. Biblioteket blev i første omgang skabt, for at sikre nogle bedre grafiske standardvalg og for at skabe en simplere syntaks (skriv mindre kode for at få et tilsvarende plot som matplotlib). Seaborn er ikke lige så fleksibelt som matplotlib.
+
+** Plotly
+[[./img/plotly_logo.png]]
+
+Plotly er det nye sort inden for datavisualisering. Matplotlib og seaborn arbejder mestendels med statiske plots, mens plotlys fordel er, at plottene er interaktive. Det er altså muligt at zoome ind, vise koordinater til punkter og meget andet i plotly. Problemet med plotly er dog det, at det hele foregår ved hjælp webudviklingsværktøjer, at plottene skal vises i en browser.
+
+** PyQtGraph
+[[./img/pyqtgraph_logo.png]]
+
+PyQtGraph er et noget simplere bibliotek end de tidligere beskrevne. Til gengæld er det hurtigere, og så er det skræddersyet til at blive indlejret i =pyside=-programmer. Pyside er netop det GUI-bibliotek, som vi har anvendt.
+
+Af disse fire muligheder kommer vi til at koncentrere os om =matplotlib=, =PyQtGraph= og =plotly=.
+
+
+* Matplotlib
+** Installation
+Som så mange andre biblioteker, kan matplotlib installeres ved hjælp af pip. Sørg for at arbejde i et *virtuelt miljø* og kør så
+
+#+begin_src bash
+pip install matplotlib
+#+end_src
+
+** Det første simple plot
+Lad os lave et simpelt plot af vores data fra tidligere. Vi tager udgangspunkt i et af de tidligere programmer med indlæsning af data og arbejder videre derfra med matplotlib.
+
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle simpelt_plot_med_matplotlib.py
+import csv
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+tider = []  # Liste som skal indeholde alle tider i float
+temperaturer = []  # Liste som skal indeholde alle temperaturer i float
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # På højre side af lighedstegnet anvendes en list comprehension
+        # hvor hvert element omdannes til float
+        # På venstre side udpakkes den nye liste til variablerne tid og temperatur
+        tid, temperatur = [float(element) for element in linje]
+
+        # Tid og temperatur tilføjes til listerne tider og temperaturer
+        tider.append(tid)
+        temperaturer.append(temperatur)
+
+# Denne del sørger for plot af data
+fig, ax = plt.subplots()
+ax.plot(tider, temperaturer)
+ax.set_title("Kaffens temperatur som funktion af tiden.")
+ax.set_xlabel("Tid [min]")
+ax.set_ylabel("Temperatur [grader celsius]")
+plt.show()
+#+end_src
+
+Ved at køre denne kode, skulle I gerne få en figur, som ligner den følgende.
+
+[[./img/simpelt_plot.png]]
+
