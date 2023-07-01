@@ -71,3 +71,153 @@ Ved at køre denne kode, skulle I gerne få en figur, som ligner den følgende.
 
 [[./img/simpelt_plot.png]]
 
+Vi kan dog gøre det bedre endnu.
+
+** Et lidt pænere plot
+
+Hvis I nu kører følgende kode, så skulle plottet gerne blive en smule pænere.
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle paenere_plot_med_matplotlib.py
+import csv
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+tider = []  # Liste som skal indeholde alle tider i float
+temperaturer = []  # Liste som skal indeholde alle temperaturer i float
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # På højre side af lighedstegnet anvendes en list comprehension
+        # hvor hvert element omdannes til float
+        # På venstre side udpakkes den nye liste til variablerne tid og temperatur
+        tid, temperatur = [float(element) for element in linje]
+
+        # Tid og temperatur tilføjes til listerne tider og temperaturer
+        tider.append(tid)
+        temperaturer.append(temperatur)
+
+# Denne del sørger for plot af data
+plt.style.use("seaborn-v0_8")
+fig, ax = plt.subplots(layout="constrained")
+ax.plot(tider, temperaturer, ".", label="Kaffetemperatur")
+ax.set_title("Kaffens temperatur som funktion af tiden.")
+ax.set_xlabel("Tid [min]")
+ax.set_ylabel(r"Temperatur [${}^\circ C$]")
+ax.legend()
+plt.show()
+#+end_src
+
+Nu skulle resultatet gerne se således ud.
+
+[[./img/paenere_plot.png]]
+
+
+*Opgave*
+
+Sammenlign koden til de to forskellige plots.
+
+Hver gang I støder på en forskel, så skriv den ned. Hvis der er noget, som I ikke umiddelbart forstår, så forsøg at slå det op, eller spørg ind til det.
+
+Eksperimentér med koden, og se, hvilke ændringer I kan få skabt på plottet.
+
+** Flere plots på én figur
+For at få et endnu bedre overblik over vores data kan vi eksperimentere med logaritmiske akser også. Mens vi er i gang, kan vi oprette flere forskellige plots på samme figur.
+
+I det følgende eksempel oprettes der et 2x2 grid til plot af 4 forskellige figurer. Hver af figurerne er døbt =ax1=, =ax2=, =ax3= og =ax4=. 
+#+begin_src python -n :exports both :results none :eval never-export :comments link :tangle flere_plots.py
+import csv
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+tider = []  # Liste som skal indeholde alle tider i float
+temperaturer = []  # Liste som skal indeholde alle temperaturer i float
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # På højre side af lighedstegnet anvendes en list comprehension
+        # hvor hvert element omdannes til float
+        # På venstre side udpakkes den nye liste til variablerne tid og temperatur
+        tid, temperatur = [float(element) for element in linje]
+
+        # Tid og temperatur tilføjes til listerne tider og temperaturer
+        tider.append(tid)
+        temperaturer.append(temperatur)
+
+# Denne del sørger for plot af data
+plt.style.use("seaborn-v0_8")
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, layout="constrained")
+fig.suptitle("Kaffens temperatur som funktion af tiden")
+for ax in (ax1, ax2, ax3, ax4):
+    ax.plot(tider, temperaturer, ".", label="Kaffetemperatur")
+    ax.set_xlabel("Tid [min]")
+    ax.set_ylabel(r"Temperatur [${}^\circ C$]")
+    ax.legend()
+ax1.set_title("Lineære akser")
+ax2.set_title("Lineær x-akse. Logaritmisk y-akse.")
+ax2.set_yscale("log")
+ax3.set_title("Logaritmisk x-akse. Lineær y-akse.")
+ax3.set_xscale("log")
+ax4.set_title("Logaritmiske x- og y-akser.")
+ax4.set_xscale("log")
+ax4.set_yscale("log")
+plt.show()
+#+end_src
+
+Resultatet skulle gerne ligne dette.
+
+[[./img/flere_plots.png]]
+
+
+Hvis man har /virkelig/ mange delfigurer, så kan det måske være dumt at navngive den alle sammen. I stedet kan man få et array (eller dobbeltarray), som kan kan referere til med indeks. Det er hvad, der f.eks. sker i det følgende eksempel. Der skulle ikke være forskel på selve resultatet sammenlignet med det tidligere eksempel.
+#+begin_src python -n :exports both :results none :eval never-export :comments link :tangle flere_plots_2.py
+import csv
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+tider = []  # Liste som skal indeholde alle tider i float
+temperaturer = []  # Liste som skal indeholde alle temperaturer i float
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # På højre side af lighedstegnet anvendes en list comprehension
+        # hvor hvert element omdannes til float
+        # På venstre side udpakkes den nye liste til variablerne tid og temperatur
+        tid, temperatur = [float(element) for element in linje]
+
+        # Tid og temperatur tilføjes til listerne tider og temperaturer
+        tider.append(tid)
+        temperaturer.append(temperatur)
+
+# Denne del sørger for plot af data
+plt.style.use("seaborn-v0_8")
+fig, axs = plt.subplots(2, 2, layout="constrained")
+fig.suptitle("Kaffens temperatur som funktion af tiden")
+print(axs)
+for ax in axs.flatten():
+    ax.plot(tider, temperaturer, ".", label="Kaffetemperatur")
+    ax.set_xlabel("Tid [min]")
+    ax.set_ylabel(r"Temperatur [${}^\circ C$]")
+    ax.legend()
+axs[0, 0].set_title("Lineære akser")
+axs[0, 1].set_title("Lineær x-akse. Logaritmisk y-akse.")
+axs[0, 1].set_yscale("log")
+axs[1, 0].set_title("Logaritmisk x-akse. Lineær y-akse.")
+axs[1, 0].set_xscale("log")
+axs[1, 1].set_title("Logaritmiske x- og y-akser.")
+axs[1, 1].set_xscale("log")
+axs[1, 1].set_yscale("log")
+plt.show()
+#+end_src
+
+*Opgave*
+
+Eksperimenter med koden i de to foregående eksempler og få ændret layoutet af figurerne, så de alle står på en linje lodret og efterfølgende på en linje vandret. Dette er vist på de to følgende figurer.
+
+[[./img/flere_plots_opgave_1.png]]
+
+[[./img/flere_plots_opgave_2.png]]
