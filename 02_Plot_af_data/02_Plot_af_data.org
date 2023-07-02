@@ -221,3 +221,88 @@ Eksperimenter med koden i de to foregående eksempler og få ændret layoutet af
 [[./img/flere_plots_opgave_1.png]]
 
 [[./img/flere_plots_opgave_2.png]]
+
+** Flere grafer i samme koordinatsystem
+Efter at have plottet det samme data i *forskellige koordinatsystemer* er det nu tid til at plotte forskellige data i *samme koordinatsystem*. Til formålet skal vi anvende filen [[./tre_afkoelingskurver.csv]], og den skal ligge i masse mappe som den følgende kodestump.
+
+#+begin_src python -n :exports both :results none :eval never-export :comments link :tangle tre_grafer_i_samme_koordinatsystem.py
+import csv
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+tider = []  # Liste, som skal indeholde alle tider i float
+# Lister, som skal indeholde temperatuerne for hver af de 3 kaffer
+temperaturer_1 = []
+temperaturer_2 = []
+temperaturer_3 = []
+
+with open("tre_afkoelingskurver.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # På højre side af lighedstegnet anvendes en list comprehension
+        # hvor hvert element omdannes til float
+        # På venstre side udpakkes den nye liste til variablen tid og listen temperaturer
+        tid, temp_1, temp_2, temp_3 = [float(element) for element in linje]
+
+        # Tid og temperatur tilføjes til listerne tider og temperaturer
+        tider.append(tid)
+        temperaturer_1.append(temp_1)
+        temperaturer_2.append(temp_2)
+        temperaturer_3.append(temp_3)
+
+# Denne del sørger for plot af data
+plt.style.use("seaborn-v0_8")
+fig, ax = plt.subplots(layout="constrained")
+ax.plot(tider, temperaturer_1, ".", label="Kaffe 1")
+ax.plot(tider, temperaturer_2, ".", label="Kaffe 2")
+ax.plot(tider, temperaturer_3, ".", label="Kaffe 3")
+ax.set_title("Kaffens temperatur som funktion af tiden.")
+ax.set_xlabel("Tid [min]")
+ax.set_ylabel(r"Temperatur [${}^\circ C$]")
+ax.legend()
+plt.show()
+
+#+end_src
+
+*Opgave*
+
+Følgende kodestump viser den samme figur, som i forrige eksempel, men valget af datatyper og kontrolstrukturer er anderledes. *Gennemgå kodestumpen, og find ud af hvilke nye datatyper, der anvendes, og hvordan koden er blevet mere automatiseret.*
+
+#+begin_src python -n :exports both :results none :eval never-export :comments link :tangle tre_grafer_i_samme_koordinatsystem_opgave.py
+import csv
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+tider = []  # Liste som skal indeholde alle tider i float
+# Dict som skal indeholde en liste af alle temperaturer i float for hver kaffe
+temperaturer = {1: [], 2: [], 3: [],}  with open("tre_afkoelingskurver.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # På højre side af lighedstegnet anvendes en list comprehension
+        # hvor hvert element omdannes til float
+        # På venstre side udpakkes den nye liste til variablen tid og listen temperaturer
+        tid, *_temperaturer = [float(element) for element in linje]
+
+        # Tid og temperatur tilføjes til listerne tider og temperaturer
+        tider.append(tid)
+        for run, temp in zip(temperaturer, _temperaturer):
+            temperaturer[run].append(temp)
+
+# Denne del sørger for plot af data
+plt.style.use("seaborn-v0_8")
+fig, ax = plt.subplots(layout="constrained")
+for nummer, _temperaturer in temperaturer.items():
+    ax.plot(tider, _temperaturer, ".", label=f"Kaffe {nummer}")
+ax.set_title("Kaffens temperatur som funktion af tiden.")
+ax.set_xlabel("Tid [min]")
+ax.set_ylabel(r"Temperatur [${}^\circ C$]")
+ax.legend()
+plt.show()
+#+end_src
+
+
+
