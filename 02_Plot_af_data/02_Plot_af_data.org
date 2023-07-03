@@ -5,20 +5,29 @@
 Når det kommer til biblioteker til datavisualisering ved hjælp af python, er der et hav af forskellige muligheder. Her nævnes blot at lille udvalg:
 
 ** Matplotlib
+#+attr_org: :width 300px
+#+attr_html: :width 300px
 [[./img/matplotlib_logo.png]]
+
 Har længe været /de facto/-biblioteket, når det har drejet sig om plot af data. Kan producere mange forskellige plots og kan indlejres i mange forskellige grafiske biblioteker, såsom =pyside= og =tkinter=. Standardtemaet ser måske en smule kedeligt ud, men det er blevet nemt hurtigt at ændre det. For nogen kan mængden af nødvendig kode, for at få et godt plot, virke stor, sammenlignet med nogle af de andre biblioteker. Til gengæld har man fuld kontrol over, hvad der skal plottes, og hvor det skal plottes henne.
 
 ** Seaborn
+#+attr_org: :width 300px
+#+attr_html: :width 300px
 [[./img/seaborn_logo.png]]
 
 Seaborn er et bibliotek, som bygger direkte ovenpå matplotlib. Biblioteket blev i første omgang skabt, for at sikre nogle bedre grafiske standardvalg og for at skabe en simplere syntaks (skriv mindre kode for at få et tilsvarende plot som matplotlib). Seaborn er ikke lige så fleksibelt som matplotlib.
 
 ** Plotly
+#+attr_org: :width 300px
+#+attr_html: :width 300px
 [[./img/plotly_logo.png]]
 
 Plotly er det nye sort inden for datavisualisering. Matplotlib og seaborn arbejder mestendels med statiske plots, mens plotlys fordel er, at plottene er interaktive. Det er altså muligt at zoome ind, vise koordinater til punkter og meget andet i plotly. Problemet med plotly er dog det, at det hele foregår ved hjælp webudviklingsværktøjer, at plottene skal vises i en browser.
 
 ** PyQtGraph
+#+attr_org: :width 300px
+#+attr_html: :width 300px
 [[./img/pyqtgraph_logo.png]]
 
 PyQtGraph er et noget simplere bibliotek end de tidligere beskrevne. Til gengæld er det hurtigere, og så er det skræddersyet til at blive indlejret i =pyside=-programmer. Pyside er netop det GUI-bibliotek, som vi har anvendt.
@@ -304,5 +313,88 @@ ax.legend()
 plt.show()
 #+end_src
 
+** To plots i samme vindue med to forskellige y-akser
+Det følgende eksempel viser, hvordan to forskellige plots kan laves i samme figur. x-aksen deles mellem to de plots mens y-akserne er forskellige. I eksemplet anvendes igen vores data for kaffetemperaturen som funktion af tiden. Forskellen på de to grafer er, at den ene graf er plottet med lineære akser, mens den anden graf er plottet i et enkeltlogaritmisk koordinatsystem.
 
+#+begin_src python -n :exports both :results none :eval never-export :comments link :tangle forskellige_y-akser.py
+import csv
 
+import matplotlib
+import matplotlib.pyplot as plt
+
+tider = []  # Liste som skal indeholde alle tider i float
+temperaturer = []  # Liste som skal indeholde alle temperaturer i float
+with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
+    csv_laeser = csv.reader(datafil, delimiter=",")
+    next(csv_laeser)  # Springer første linje over
+    for linje in csv_laeser:
+        # På højre side af lighedstegnet anvendes en list comprehension
+        # hvor hvert element omdannes til float
+        # På venstre side udpakkes den nye liste til variablerne tid og temperatur
+        tid, temperatur = [float(element) for element in linje]
+
+        # Tid og temperatur tilføjes til listerne tider og temperaturer
+        tider.append(tid)
+        temperaturer.append(temperatur)
+
+# Denne del sørger for plot af data
+lineaer_farve = "blue"
+plt.style.use("seaborn-v0_8")
+fig, ax1 = plt.subplots(layout="constrained")
+fig.suptitle("Kaffens temperatur som funktion af tiden")
+ax1.plot(tider, temperaturer, ".", label="Kaffetemperatur", color=lineaer_farve)
+ax1.set_xlabel("Tid [min]")
+ax1.set_ylabel(r"Temperatur [${}^\circ C$]")
+ax1.grid(False)
+ax1.tick_params("y", labelcolor=lineaer_farve)
+
+semilog_farve = "red"
+ax2 = ax1.twinx()
+ax2.plot(tider, temperaturer, ".", label="Kaffetemperatur semilog", color=semilog_farve)
+ax2.set_ylabel(r"Temperatur [${}^\circ C$]")
+ax2.set_yscale("log")
+ax2.grid(False)
+ax2.tick_params("y", labelcolor=semilog_farve)
+fig.legend(loc="upper right", bbox_to_anchor=(1,1), bbox_transform=ax1.transAxes)
+plt.show()
+#+end_src
+
+Resultatet kan ses her.
+
+[[./img/forskellige_akser.png]]
+
+*Opgave*
+
+#+attr_org: :width 500px
+#+attr_html: :width 500px
+[[./img/dragracer.jpg]]
+
+I datafilen [[./drag_racer.csv][drag_racer.csv]], som I også kan se indholdet af nedenfor, er der gemt sammenhørende værdier for en dragracer, som først accelerere og siden bremser hårdt op.
+
+#+begin_example
+time (s),distance (m),velocity (m/s),acceleration (m/s^2)
+0,0,0,39
+0.1,0.195,3.9,39
+0.2,0.78,7.8,39
+0.3,1.755,11.7,39
+0.4,3.12,15.6,39
+0.5,4.875,19.5,39
+0.6,7.02,23.4,39
+0.7,9.555,27.3,39
+0.8,12.48,31.2,39
+0.9,15.795,35.1,39
+1,19.5,39,-50
+1.1,22.05,33,-50
+1.2,24.24,27,-50
+1.3,26.07,21,-50
+1.4,27.54,15,-50
+1.5,28.65,9,-50
+1.6,29.4,3,-50
+1.7,29.75,-3,-50
+#+end_example
+
+Fra fysik kender I til (t,s)- (t,v)-grafer og (t,a)-grafer.
+
+*I skal sørge for at producere figurer, som bedst muligt visualisere den givne data.*
+
+Husk titel på figurer og grafer, enheder på akserne, passende "legends". Hav gerne flere grafer på samme figur, hvis det giver mening.
