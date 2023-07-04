@@ -1,4 +1,4 @@
-# [[file:02_Plot_af_data.org::*To plots i samme vindue med to forskellige y-akser][To plots i samme vindue med to forskellige y-akser:1]]
+# [[file:02_Plot_af_data_matplotlib.org::*To plots i samme vindue med to forskellige y-akser][To plots i samme vindue med to forskellige y-akser:1]]
 import csv
 
 import matplotlib

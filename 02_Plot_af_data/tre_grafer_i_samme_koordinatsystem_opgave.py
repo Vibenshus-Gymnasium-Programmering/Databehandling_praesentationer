@@ -1,4 +1,4 @@
-# [[file:02_Plot_af_data.org::*Flere grafer i samme koordinatsystem][Flere grafer i samme koordinatsystem:2]]
+# [[file:02_Plot_af_data_matplotlib.org::*Flere grafer i samme koordinatsystem][Flere grafer i samme koordinatsystem:2]]
 import csv
 
 import matplotlib
@@ -12,7 +12,7 @@ temperaturer = {1: [], 2: [], 3: [],}  with open("tre_afkoelingskurver.csv") as 
     for linje in csv_laeser:
         # På højre side af lighedstegnet anvendes en list comprehension
         # hvor hvert element omdannes til float
-        # På venstre side udpakkes den nye liste til variablen tid og listen temperaturer
+        # På venstre side udpakkes den nye liste til variablen tid og listen _temperaturer
         tid, *_temperaturer = [float(element) for element in linje]
 
         # Tid og temperatur tilføjes til listerne tider og temperaturer

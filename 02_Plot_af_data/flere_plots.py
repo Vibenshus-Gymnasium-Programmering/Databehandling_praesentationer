@@ -1,4 +1,4 @@
-# [[file:02_Plot_af_data.org::*Flere plots på én figur][Flere plots på én figur:1]]
+# [[file:02_Plot_af_data_matplotlib.org::*Flere plots på én figur][Flere plots på én figur:1]]
 import csv
 
 import matplotlib

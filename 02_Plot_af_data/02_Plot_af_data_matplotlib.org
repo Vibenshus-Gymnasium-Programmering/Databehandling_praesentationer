@@ -1,49 +1,13 @@
-#+title: Plot af data - Matplotlib, Plotly og PyQtGraph
+#+title: Plot af data - Matplotlib
 #+options: toc:nil timestamp:nil ^:{}
-
-* Introduktion
-Når det kommer til biblioteker til datavisualisering ved hjælp af python, er der et hav af forskellige muligheder. Her nævnes blot at lille udvalg:
-
-** Matplotlib
-#+attr_org: :width 300px
-#+attr_html: :width 300px
-[[./img/matplotlib_logo.png]]
-
-Har længe været /de facto/-biblioteket, når det har drejet sig om plot af data. Kan producere mange forskellige plots og kan indlejres i mange forskellige grafiske biblioteker, såsom =pyside= og =tkinter=. Standardtemaet ser måske en smule kedeligt ud, men det er blevet nemt hurtigt at ændre det. For nogen kan mængden af nødvendig kode, for at få et godt plot, virke stor, sammenlignet med nogle af de andre biblioteker. Til gengæld har man fuld kontrol over, hvad der skal plottes, og hvor det skal plottes henne.
-
-** Seaborn
-#+attr_org: :width 300px
-#+attr_html: :width 300px
-[[./img/seaborn_logo.png]]
-
-Seaborn er et bibliotek, som bygger direkte ovenpå matplotlib. Biblioteket blev i første omgang skabt, for at sikre nogle bedre grafiske standardvalg og for at skabe en simplere syntaks (skriv mindre kode for at få et tilsvarende plot som matplotlib). Seaborn er ikke lige så fleksibelt som matplotlib.
-
-** Plotly
-#+attr_org: :width 300px
-#+attr_html: :width 300px
-[[./img/plotly_logo.png]]
-
-Plotly er det nye sort inden for datavisualisering. Matplotlib og seaborn arbejder mestendels med statiske plots, mens plotlys fordel er, at plottene er interaktive. Det er altså muligt at zoome ind, vise koordinater til punkter og meget andet i plotly. Problemet med plotly er dog det, at det hele foregår ved hjælp webudviklingsværktøjer, at plottene skal vises i en browser.
-
-** PyQtGraph
-#+attr_org: :width 300px
-#+attr_html: :width 300px
-[[./img/pyqtgraph_logo.png]]
-
-PyQtGraph er et noget simplere bibliotek end de tidligere beskrevne. Til gengæld er det hurtigere, og så er det skræddersyet til at blive indlejret i =pyside=-programmer. Pyside er netop det GUI-bibliotek, som vi har anvendt.
-
-Af disse fire muligheder kommer vi til at koncentrere os om =matplotlib=, =PyQtGraph= og =plotly=.
-
-
-* Matplotlib
-** Installation
+* Installation
 Som så mange andre biblioteker, kan matplotlib installeres ved hjælp af pip. Sørg for at arbejde i et *virtuelt miljø* og kør så
 
 #+begin_src bash
 pip install matplotlib
 #+end_src
 
-** Det første simple plot
+* Det første simple plot
 Lad os lave et simpelt plot af vores data fra tidligere. Vi tager udgangspunkt i et af de tidligere programmer med indlæsning af data og arbejder videre derfra med matplotlib.
 
 #+begin_src python -n :exports both :results output :eval never-export :comments link :tangle simpelt_plot_med_matplotlib.py
@@ -82,7 +46,7 @@ Ved at køre denne kode, skulle I gerne få en figur, som ligner den følgende.
 
 Vi kan dog gøre det bedre endnu.
 
-** Et lidt pænere plot
+* Et lidt pænere plot
 
 Hvis I nu kører følgende kode, så skulle plottet gerne blive en smule pænere.
 #+begin_src python -n :exports both :results output :eval never-export :comments link :tangle paenere_plot_med_matplotlib.py
@@ -130,7 +94,9 @@ Hver gang I støder på en forskel, så skriv den ned. Hvis der er noget, som I 
 
 Eksperimentér med koden, og se, hvilke ændringer I kan få skabt på plottet.
 
-** Flere plots på én figur
+Hvis I hurtigt vil ændre temaet på jeres plot, så kan I få et overblik over nogle foruddefinerede temaer her: [[https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html]].
+
+* Flere plots på én figur
 For at få et endnu bedre overblik over vores data kan vi eksperimentere med logaritmiske akser også. Mens vi er i gang, kan vi oprette flere forskellige plots på samme figur.
 
 I det følgende eksempel oprettes der et 2x2 grid til plot af 4 forskellige figurer. Hver af figurerne er døbt =ax1=, =ax2=, =ax3= og =ax4=. 
@@ -180,7 +146,7 @@ Resultatet skulle gerne ligne dette.
 [[./img/flere_plots.png]]
 
 
-Hvis man har /virkelig/ mange delfigurer, så kan det måske være dumt at navngive den alle sammen. I stedet kan man få et array (eller dobbeltarray), som kan kan referere til med indeks. Det er hvad, der f.eks. sker i det følgende eksempel. Der skulle ikke være forskel på selve resultatet sammenlignet med det tidligere eksempel.
+Hvis man har /virkelig/ mange delfigurer, så kan det måske være dumt at navngive den alle sammen. I stedet kan man få et array (eller dobbeltarray), som man kan referere til med indeks. Det er hvad, der f.eks. sker i det følgende eksempel. Der skulle ikke være forskel på selve resultatet sammenlignet med det tidligere eksempel.
 #+begin_src python -n :exports both :results none :eval never-export :comments link :tangle flere_plots_2.py
 import csv
 
@@ -231,7 +197,7 @@ Eksperimenter med koden i de to foregående eksempler og få ændret layoutet af
 
 [[./img/flere_plots_opgave_2.png]]
 
-** Flere grafer i samme koordinatsystem
+* Flere grafer i samme koordinatsystem
 Efter at have plottet det samme data i *forskellige koordinatsystemer* er det nu tid til at plotte forskellige data i *samme koordinatsystem*. Til formålet skal vi anvende filen [[./tre_afkoelingskurver.csv]], og den skal ligge i masse mappe som den følgende kodestump.
 
 #+begin_src python -n :exports both :results none :eval never-export :comments link :tangle tre_grafer_i_samme_koordinatsystem.py
@@ -252,7 +218,7 @@ with open("tre_afkoelingskurver.csv") as datafil:
     for linje in csv_laeser:
         # På højre side af lighedstegnet anvendes en list comprehension
         # hvor hvert element omdannes til float
-        # På venstre side udpakkes den nye liste til variablen tid og listen temperaturer
+        # På venstre side udpakkes den nye liste til de viste variable
         tid, temp_1, temp_2, temp_3 = [float(element) for element in linje]
 
         # Tid og temperatur tilføjes til listerne tider og temperaturer
@@ -293,7 +259,7 @@ temperaturer = {1: [], 2: [], 3: [],}  with open("tre_afkoelingskurver.csv") as 
     for linje in csv_laeser:
         # På højre side af lighedstegnet anvendes en list comprehension
         # hvor hvert element omdannes til float
-        # På venstre side udpakkes den nye liste til variablen tid og listen temperaturer
+        # På venstre side udpakkes den nye liste til variablen tid og listen _temperaturer
         tid, *_temperaturer = [float(element) for element in linje]
 
         # Tid og temperatur tilføjes til listerne tider og temperaturer
@@ -313,7 +279,7 @@ ax.legend()
 plt.show()
 #+end_src
 
-** To plots i samme vindue med to forskellige y-akser
+* To plots i samme vindue med to forskellige y-akser
 Det følgende eksempel viser, hvordan to forskellige plots kan laves i samme figur. x-aksen deles mellem to de plots mens y-akserne er forskellige. I eksemplet anvendes igen vores data for kaffetemperaturen som funktion af tiden. Forskellen på de to grafer er, at den ene graf er plottet med lineære akser, mens den anden graf er plottet i et enkeltlogaritmisk koordinatsystem.
 
 #+begin_src python -n :exports both :results none :eval never-export :comments link :tangle forskellige_y-akser.py
@@ -398,3 +364,7 @@ Fra fysik kender I til (t,s)- (t,v)-grafer og (t,a)-grafer.
 *I skal sørge for at producere figurer, som bedst muligt visualisere den givne data.*
 
 Husk titel på figurer og grafer, enheder på akserne, passende "legends". Hav gerne flere grafer på samme figur, hvis det giver mening.
+
+* Andre præsentationer
+- [[./02_Plot_af_data_plotly.org][Næste præsentation]] omhandler brugen af =plotly=.
+- [[./02_Plot_af_data_introduktion.org][Forrige præsentation]] omhandler en lille introduktion til forskellige biblioteker til datavisualisering.

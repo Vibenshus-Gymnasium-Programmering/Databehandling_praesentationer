@@ -1,0 +1,12 @@
+#+title: Plot af data - Plotly
+#+options: toc:nil timestamp:nil ^:{}
+
+#+begin_src python -n :exports both :results output :eval never-export :comments link :tangle plotly_simpel.py
+import plotly.express as px
+#+end_src
+
+
+
+* Andre præsentationer
+- [[./02_Plot_af_data_pyqtgraph.org][Næste præsentation]] omhandler brugen af =PyQtGraph=.
+- [[./02_Plot_af_data_matplotlib.org][Forrige præsentation]] omhandler brugen af =matplotlib=.

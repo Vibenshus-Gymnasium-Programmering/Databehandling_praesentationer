@@ -1,4 +1,4 @@
-# [[file:02_Plot_af_data.org::*Et lidt pænere plot][Et lidt pænere plot:1]]
+# [[file:02_Plot_af_data_matplotlib.org::*Et lidt pænere plot][Et lidt pænere plot:1]]
 import csv
 
 import matplotlib

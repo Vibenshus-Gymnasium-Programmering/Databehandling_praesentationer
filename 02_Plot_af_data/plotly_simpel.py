@@ -1,8 +1,6 @@
-# [[file:02_Plot_af_data_matplotlib.org::*Det første simple plot][Det første simple plot:1]]
+# [[file:02_Plot_af_data_plotly.org::+begin_src python -n :exports both :results output :eval never-export :comments link :tangle plotly_simpel.py][No heading:1]]
 import csv
-
-import matplotlib
-import matplotlib.pyplot as plt
+import plotly.express as px
 
 tider = []  # Liste som skal indeholde alle tider i float
 temperaturer = []  # Liste som skal indeholde alle temperaturer i float
@@ -19,11 +17,12 @@ with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
         tider.append(tid)
         temperaturer.append(temperatur)
 
-# Denne del sørger for plot af data
-fig, ax = plt.subplots()
-ax.plot(tider, temperaturer)
-ax.set_title("Kaffens temperatur som funktion af tiden.")
-ax.set_xlabel("Tid [min]")
-ax.set_ylabel("Temperatur [grader celsius]")
-plt.show()
-# Det første simple plot:1 ends here
+fig = px.scatter(
+    x=tider,
+    y=temperaturer,
+    labels={"x": "Tid [min]", "y": r"$Temperatur [{}^\circ C]$"},
+    title="Kaffetemperatur som funktion af tiden",
+)
+
+fig.show()
+# No heading:1 ends here
