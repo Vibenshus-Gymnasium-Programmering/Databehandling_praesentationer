@@ -271,4 +271,4 @@ print(df["Temperaturer"])
 Nu har I set flere forskellige måder at få gjort data klar. Nu skal vi se nærmere på plot af data. Gå til den præsentation. Linket kan I finde i næste afsnit.
 
 * Andre præsentationer
-[[../00_Introduktion_til_datasaet/00_Introduktion.org][Forrige præsentation]] omhandlede præsentationen af det anvendte datasæt, mens den [[../02_Plot_af_data/02_Plot_af_data.org][næste præsentation]] omhandler plot af data ved hjælp af forskellige biblioteker til netop dette.
+[[../00_Introduktion_til_datasaet/00_Introduktion.org][Forrige præsentation]] omhandlede præsentationen af det anvendte datasæt, mens den [[../02_Plot_af_data/02_Plot_af_data_introduktion.org][næste præsentation]] omhandler plot af data ved hjælp af forskellige biblioteker til netop dette.
