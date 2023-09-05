@@ -32,7 +32,7 @@ Plotly er det nye sort inden for datavisualisering. Matplotlib og seaborn arbejd
 
 PyQtGraph er et noget simplere bibliotek end de tidligere beskrevne. Til gengæld er det hurtigere, og så er det skræddersyet til at blive indlejret i =pyside=-programmer. Pyside er netop det GUI-bibliotek, som vi har anvendt.
 
-Af disse fire muligheder kommer vi til at koncentrere os om =matplotlib=, =PyQtGraph= og =plotly=.
+Af disse fire muligheder kommer vi til at koncentrere os om =matplotlib=.
 
 * Andre præsentationer
 - [[./02_Plot_af_data_matplotlib.org][Næste præsentation]] omhandler brugen af =matplotlib=.

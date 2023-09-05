@@ -7,6 +7,8 @@ Som så mange andre biblioteker, kan matplotlib installeres ved hjælp af pip. S
 pip install matplotlib
 #+end_src
 
+Alternativt kan I anvende PyCharm til installation af matplotlib. Det foregår på samme måde som installation af =arcade= og =pyside6=.
+
 * Det første simple plot
 Lad os lave et simpelt plot af vores data fra tidligere. Vi tager udgangspunkt i et af de tidligere programmer med indlæsning af data og arbejder videre derfra med matplotlib.
 
@@ -198,7 +200,7 @@ Eksperimenter med koden i de to foregående eksempler og få ændret layoutet af
 [[./img/flere_plots_opgave_2.png]]
 
 * Flere grafer i samme koordinatsystem
-Efter at have plottet det samme data i *forskellige koordinatsystemer* er det nu tid til at plotte forskellige data i *samme koordinatsystem*. Til formålet skal vi anvende filen [[./tre_afkoelingskurver.csv]], og den skal ligge i masse mappe som den følgende kodestump.
+Efter at have plottet det samme data i *forskellige koordinatsystemer* er det nu tid til at plotte forskellige data i *samme koordinatsystem*. Til formålet skal vi anvende filen [[./tre_afkoelingskurver.csv]], og den skal ligge i samme mappe som den følgende kodestump.
 
 #+begin_src python -n :exports both :results none :eval never-export :comments link :tangle tre_grafer_i_samme_koordinatsystem.py
 import csv
@@ -366,5 +368,4 @@ Fra fysik kender I til (t,s)- (t,v)-grafer og (t,a)-grafer.
 Husk titel på figurer og grafer, enheder på akserne, passende "legends". Hav gerne flere grafer på samme figur, hvis det giver mening.
 
 * Andre præsentationer
-- [[./02_Plot_af_data_plotly.org][Næste præsentation]] omhandler brugen af =plotly=.
 - [[./02_Plot_af_data_introduktion.org][Forrige præsentation]] omhandler en lille introduktion til forskellige biblioteker til datavisualisering.
