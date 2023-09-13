@@ -370,3 +370,4 @@ Husk titel på figurer og grafer, enheder på akserne, passende "legends". Hav g
 
 * Andre præsentationer
 - [[./02_Plot_af_data_introduktion.org][Forrige præsentation]] omhandler en lille introduktion til forskellige biblioteker til datavisualisering.
+- [[../03_Sympy/Introduktion_til_sympy.org][Næste præsentation]] giver en introduktion til biblioteket =sympy=, som kan betragtes som et CAS-værktøj til python.
