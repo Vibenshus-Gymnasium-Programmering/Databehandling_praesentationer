@@ -281,8 +281,8 @@ Ophæv følgende parenteser:
 
 Udvid følgende logaritmeudtryk:
 
-6. $\log \left( x\cdot y \right)$
-7. $\log \left( \frac{3 \cdot x^{1.5}}{y} \right)$
+6. $log \left( x\cdot y \right)$
+7. $log \left( \frac{3 \cdot x^{1.5}}{y} \right)$
 * Løsning af ligninger
 I matematiske fag anvender lighedstegnet (=) til at opbygge ligninger. I programmering og dermed også i python anvendes lighedstegnet som tildelingsoperator, altså til f.eks. at oprette variable ~a = 3~. Af den grund kan man ikke anvende lighedstegnet, når man skal oprette ligninger i sympy.
 
