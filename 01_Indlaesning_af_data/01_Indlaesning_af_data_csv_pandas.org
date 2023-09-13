@@ -42,7 +42,7 @@ with open("Afkoeling_af_kaffe_nul_grader_udenfor.csv") as datafil:
 ['180.00 ', ' 1.05']
 #+end_example
 
-Ud fra outputtet kan det ses, at der er flere ting, som skal gøres før end data kan bruges til plot. For det første ses det, at =csv_laeser= returnerer en =liste= af =strenge= (med to elementer i i dette tilfælde), og den første linje angiver blot datafilens struktur. Denne første linje kan derfor ikke bruges til at plotte. *For at gøre vores program brugbart skal vi altså have sorteret den første linje fra og vi skal have konverteret dataværdierne fra =strenge= til =floats= (decimaltal).
+Ud fra outputtet kan det ses, at der er flere ting, som skal gøres før end data kan bruges til plot. For det første ses det, at =csv_laeser= returnerer en =liste= af =strenge= (med to elementer i i dette tilfælde), og den første linje angiver blot datafilens struktur. Denne første linje kan derfor ikke bruges til at plotte. *For at gøre vores program brugbart skal vi altså have sorteret den første linje fra og vi skal have konverteret dataværdierne fra =strenge= til =floats= (decimaltal)*.
 
 ** Indlæsning samt konvertering
 Lad os se på en ændret version af vores kode, som sørger for at fjerne første linje og konvertere resten af linjerne til =floats=. Der er flere måder at gøre dette på, så der kommer lige nogle forskellige eksempler.
