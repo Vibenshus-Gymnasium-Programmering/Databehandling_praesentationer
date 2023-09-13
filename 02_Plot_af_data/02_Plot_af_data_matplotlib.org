@@ -255,7 +255,8 @@ import matplotlib.pyplot as plt
 
 tider = []  # Liste som skal indeholde alle tider i float
 # Dict som skal indeholde en liste af alle temperaturer i float for hver kaffe
-temperaturer = {1: [], 2: [], 3: [],}  with open("tre_afkoelingskurver.csv") as datafil:
+temperaturer = {1: [], 2: [], 3: [],}
+with open("tre_afkoelingskurver.csv") as datafil:
     csv_laeser = csv.reader(datafil, delimiter=",")
     next(csv_laeser)  # Springer første linje over
     for linje in csv_laeser:
