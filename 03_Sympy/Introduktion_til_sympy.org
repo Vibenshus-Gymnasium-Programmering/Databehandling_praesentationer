@@ -652,10 +652,8 @@ Udfør følgende ubestemte integraler (altså find stamfunktionerne) vha sympy. 
 
 Udfør følgende bestemte integraler (altså find arealet under kurven).
 
-\begin{align*}
-&\int_1^2 \frac{x^2-x}{x} \,dx \\
-&\int_0^1 x^2+1 \,dx
-\end{align*} 
+- $\int_1^2 \frac{x^2-x}{x} \,dx$
+- $\int_0^1 x^2+1 \,dx$
 
 *Ekstra udfordring*.
 
