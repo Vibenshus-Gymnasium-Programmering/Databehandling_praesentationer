@@ -556,7 +556,7 @@ Her er resultatet af differentiationen:
 #+end_example
 
 ** Opgaver
-I skal nu finde de afledte funktioner til følgende funktioner vha sympy. Se om I ikke kan finde alle tre afledte funktioner i ét script.
+I skal nu finde de afledte funktioner til følgende funktioner vha sympy. Se om I ikke kan finde alle tre afledte funktioner i ét skript.
 
 \begin{align*}
 f(x) &= \left( 8x^4+4 \right)\cdot \left( 3x^3-2x+7 \right) \\
@@ -647,10 +647,8 @@ sp.pprint(bestemt_integral.doit().evalf(4))
 *** Opgaver
 Udfør følgende ubestemte integraler (altså find stamfunktionerne) vha sympy. $e^x$ kan skrives som =sp.exp(x)= i sympy, mens eulers tal $e=2.71\dots$ kan skrives som =sp.E=.
 
-\begin{align*}
-&\int 3 x^{-8}- \frac{1}{x}+8 \,dx \\
-&\int e^x - x^e \,dx
-\end{align*}
+- $\int 3 x^{-8}- \frac{1}{x}+8 \,dx$
+- $\int e^x - x^e \,dx$
 
 Udfør følgende bestemte integraler (altså find arealet under kurven).
 
