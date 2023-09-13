@@ -1,0 +1,1772 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="da" xml:lang="da">
+<head>
+<!-- 2023-09-13 ons 22:55 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Introduktion til SymPy</title>
+<meta name="author" content="Jacob Debel" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Introduktion til SymPy</h1>
+
+
+<div id="outline-container-org342c0ed" class="outline-2">
+<h2 id="org342c0ed">Introduktion</h2>
+<div class="outline-text-2" id="text-org342c0ed">
+
+<div id="org727f46f" class="figure">
+<p><img src="./img/sympy_logo.png" alt="sympy_logo.png" />
+</p>
+</div>
+
+<p>
+<code>SymPy</code> er bibliotek, som velegnet til matematisk arbejde. Følgende citat er taget fra hjemmesiden <a href="https://www.sympy.org/">https://www.sympy.org/</a>.
+</p>
+
+<blockquote>
+<p>
+About
+</p>
+
+<p>
+SymPy is a Python library for symbolic mathematics. It aims to become a full-featured computer algebra system (CAS) while keeping the code as simple as possible in order to be comprehensible and easily extensible. SymPy is written entirely in Python. 
+</p>
+</blockquote>
+
+<p>
+Grunden til, at vi skal arbejde med dette bibliotek, er, at jeg har planer om, at vi skal kunne udvikle vores egne <i>light</i>-versioner af f.eks. geogebra, maple osv. Ved at kombinere vores viden om <code>pyside6</code>, <code>csv</code>, <code>matplotlib</code> og <code>sympy</code>, skulle vi gerne kunne komme et godt stykke af vejen.
+</p>
+
+<p>
+I de følgende afsnit vil I blive præsenteret for diverse anvendelsesmuligheder af <code>SymPy</code>.
+</p>
+
+<p>
+Den følgende playliste på youtube giver også en fin introduktion til brugen af SymPy.
+</p>
+
+<p>
+<a href="https://youtube.com/playlist?list=PLSE7WKf_qqo1T5VV1nqXTj2iNiSpFk72T&amp;si=Rz67T5pcn84Y0jok">https://youtube.com/playlist?list=PLSE7WKf_qqo1T5VV1nqXTj2iNiSpFk72T&amp;si=Rz67T5pcn84Y0jok</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5ce4c4e" class="outline-2">
+<h2 id="org5ce4c4e">Installation</h2>
+<div class="outline-text-2" id="text-org5ce4c4e">
+<p>
+SymPy kan simpelt installeres ved hjælp af <code>pip</code>, og ligesom for <code>arcade</code>, <code>pyside6</code> og <code>matplotlib</code> er det bedst at gøre dette i et virtuelt miljø.
+</p>
+
+<p>
+Hvis I anvender en terminal til at holde styr på jeres virtuelle miljøer, så skal I først oprette og aktivere et nyt virtuelt miljø. Herefter kan I installere sympy ved at skrive følgende i terminalen:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">pip install sympy
+</pre>
+</div>
+
+<p>
+Hvis I anvender <code>PyCharm</code>, er det en god idé at oprette et nyt projekt, som omhandler vores arbejde med <code>sympy</code>. Sørg for at oprette et nyt virtuelt miljø til dette projekt.
+Når projektet er oppe at køre, kan I installere <code>sympy</code> på samme måde, som når I tidligere har installeret <code>arcade</code>, <code>pyside6</code> og <code>matplotlib</code>. I skal bare sørge for at søge efter <b>sympy</b>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org66c9f68" class="outline-2">
+<h2 id="org66c9f68">Det basale - Opstilling af udtryk</h2>
+<div class="outline-text-2" id="text-org66c9f68">
+<p>
+For at gøre det hele lidt mere håndgribeligt tager vi udgangspunkt i nogle simple matematikopgaver fra 1.g.
+</p>
+
+
+<div id="orgd11a91e" class="figure">
+<p><img src="./img/simple_opgaver_01.png" alt="simple_opgaver_01.png" />
+</p>
+</div>
+
+<p>
+Lad os arbejde med delopgave b. Vi skal altså kunne definere udtrykket
+</p>
+
+<p>
+\[\frac{1+a}{3 \left( 2+1 \right)} \cdot \frac{2}{a}\,,\]
+</p>
+
+
+<p>
+og omskrive det til en enkelt brøk. Vi kan se, at vi har et enkelt symbol, <code>a</code>, og resten er tal. Når man skal anvende symboler i sympy, skal man sørge for at definere symbolerne først. I det følgende kodeeksempel gøres der klar til at kunne løse opgaven
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #989898;"># </span><span style="color: #989898;">a defineres til at v&#230;re et symbol</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">a</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"a"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">4: </span>
+<span class="linenr">5: </span><span style="color: #989898;"># </span><span style="color: #989898;">Nu oprettes et udtryk</span>
+<span class="linenr">6: </span><span style="color: #989898;"># </span><span style="color: #989898;">L&#230;g m&#230;rke til at alle gangetegn skal skrives ind.</span>
+<span class="linenr">7: </span><span style="color: #00d3d0;">udtryk_b</span> = <span style="color: #ffffff;">(</span>1+a<span style="color: #ffffff;">)</span>/<span style="color: #ffffff;">(</span>3*<span style="color: #ff66ff;">(</span>2+1<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>*2/a
+<span class="linenr">8: </span><span style="color: #989898;"># </span><span style="color: #989898;">Nedenfor printes udtrykket ud p&#229; en "p&#230;n" m&#229;de</span>
+<span class="linenr">9: </span>sp.pprint<span style="color: #ffffff;">(</span>udtryk_b<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org7f644f5">
+2⋅a   2
+─── + ─
+ 9    9
+───────
+   a   
+</pre>
+</div>
+
+<div id="outline-container-org833a731" class="outline-3">
+<h3 id="org833a731">Diverse omskrivninger</h3>
+<div class="outline-text-3" id="text-org833a731">
+<p>
+Når man vil omskrive et matematisk udtryk i sympy er der en række funktioner/metoder, som kan anvendes.
+</p>
+
+<dl class="org-dl">
+<dt><code>sp.expand()</code></dt><dd>Kan udvidde et udtryk.</dd>
+</dl>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">udtryk</span> = <span style="color: #ffffff;">(</span>x+1<span style="color: #ffffff;">)</span>**2
+<span class="linenr">4: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Oprindeligt udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>sp.pprint<span style="color: #ffffff;">(</span>udtryk<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Udviddet udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>sp.expand<span style="color: #ff66ff;">(</span>udtryk<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="orgbeecf25">
+Oprindeligt udtryk
+       2
+(x + 1) 
+Udviddet udtryk
+ 2          
+x  + 2⋅x + 1
+</pre>
+
+<dl class="org-dl">
+<dt><code>sp.factor()</code></dt><dd>Kan faktorisere et udtryk</dd>
+</dl>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">udtryk</span> = x**3 - x**2 + x -1
+<span class="linenr">4: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Oprindeligt udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>sp.pprint<span style="color: #ffffff;">(</span>udtryk<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Faktoriseret udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>sp.factor<span style="color: #ff66ff;">(</span>udtryk<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org6c50a77">
+Oprindeligt udtryk
+ 3    2        
+x  - x  + x - 1
+Faktoriseret udtryk
+        ⎛ 2    ⎞
+(x - 1)⋅⎝x  + 1⎠
+</pre>
+
+<dl class="org-dl">
+<dt><code>sp.collect()</code></dt><dd>Kan samle fælles potenser af led i et udtryk.</dd>
+</dl>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span>, <span style="color: #00d3d0;">y</span>, <span style="color: #00d3d0;">z</span> = sp.symbols<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x, y, z"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">udtryk</span> = x*y + x - 3 + 2*x**2 - z*x**2 + x**3
+<span class="linenr">4: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Oprindeligt udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>sp.pprint<span style="color: #ffffff;">(</span>udtryk<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Samlede led"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>sp.collect<span style="color: #ff66ff;">(</span>udtryk, x<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="orgd2cfe11">
+Oprindeligt udtryk
+ 3    2        2              
+x  - x ⋅z + 2⋅x  + x⋅y + x - 3
+Samlede led
+ 3    2                        
+x  + x ⋅(2 - z) + x⋅(y + 1) - 3
+</pre>
+
+<dl class="org-dl">
+<dt><code>sp.cancel()</code></dt><dd>Kan omskrive rationelle funktioner (funktioner med brøker) til formen \(\frac{p}{q}\), hvor der kun er én brøkstreg.</dd>
+</dl>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span>  = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">udtryk</span> = <span style="color: #ffffff;">(</span>3*x/2 -2<span style="color: #ffffff;">)</span>/<span style="color: #ffffff;">(</span>x-4<span style="color: #ffffff;">)</span> + 1/x 
+<span class="linenr">4: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Oprindeligt udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>sp.pprint<span style="color: #ffffff;">(</span>udtryk<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Udtryk p&#229; &#233;n br&#248;kstreg"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>sp.cancel<span style="color: #ff66ff;">(</span>udtryk<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org970c937">
+Oprindeligt udtryk
+3⋅x        
+─── - 2    
+ 2        1
+─────── + ─
+ x - 4    x
+Udtryk på én brøkstreg
+   2          
+3⋅x  - 2⋅x - 8
+──────────────
+     2        
+  2⋅x  - 8⋅x  
+</pre>
+
+<dl class="org-dl">
+<dt><code>sp.apart()</code></dt><dd>Kan opdele en rationel funktion (en funktion med én stor brøkstreg) til mange mindre brøkstreger.</dd>
+</dl>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span>  = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">udtryk</span> = <span style="color: #ffffff;">(</span>4*x**3 + 21*x**2 + 10*x + 12<span style="color: #ffffff;">)</span>/<span style="color: #ffffff;">(</span>x**4 + 5*x**3 + 5*x**2 + 4*x<span style="color: #ffffff;">)</span>
+<span class="linenr">4: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Oprindeligt udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>sp.pprint<span style="color: #ffffff;">(</span>udtryk<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Opdeling i flere mindre br&#248;ker"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>sp.apart<span style="color: #ff66ff;">(</span>udtryk<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org2b2dbd7">
+Oprindeligt udtryk
+   3       2            
+4⋅x  + 21⋅x  + 10⋅x + 12
+────────────────────────
+  4      3      2       
+ x  + 5⋅x  + 5⋅x  + 4⋅x 
+Opdeling i flere mindre brøker
+ 2⋅x - 1       1     3
+────────── - ───── + ─
+ 2           x + 4   x
+x  + x + 1            
+</pre>
+
+<dl class="org-dl">
+<dt><code>sp.simplify()</code></dt><dd>Forsøger at gøre lidt af det hele, men det er ikke klart, hvad der er den simpleste version af et udtryk.</dd>
+</dl>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span>  = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">udtryk</span> =<span style="color: #ffffff;">(</span>x**3 + x**2 - x - 1<span style="color: #ffffff;">)</span>/<span style="color: #ffffff;">(</span>x**2 + 2*x + 1<span style="color: #ffffff;">)</span> 
+<span class="linenr">4: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Oprindeligt udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>sp.pprint<span style="color: #ffffff;">(</span>udtryk<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Simplificeret udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>sp.simplify<span style="color: #ff66ff;">(</span>udtryk<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="orgccea299">
+Oprindeligt udtryk
+ 3    2        
+x  + x  - x - 1
+───────────────
+   2           
+  x  + 2⋅x + 1 
+Simplificeret udtryk
+x - 1
+</pre>
+
+<p>
+Derudover er der en række funktioner som kan håndtere trigonometriske udtryk, potensregler, samt eksponential- logaritme-udtryk:
+</p>
+
+<ul class="org-ul">
+<li><code>sp.trigsimp</code></li>
+<li><code>sp.expand_trig</code></li>
+<li><code>sp.powsimp</code></li>
+<li><code>sp.expand_power_exp</code></li>
+<li><code>sp.expand_power_base</code></li>
+<li><code>sp.powdenest</code></li>
+<li><code>sp.expand_log</code></li>
+<li><code>sp.logcombine</code></li>
+</ul>
+
+<p>
+I kan læse mere om hver af funktionerne her:
+</p>
+
+<p>
+<a href="https://docs.sympy.org/latest/tutorials/intro-tutorial/simplification.html">https://docs.sympy.org/latest/tutorials/intro-tutorial/simplification.html</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb5503d6" class="outline-3">
+<h3 id="orgb5503d6">Tilbage til opgaven</h3>
+<div class="outline-text-3" id="text-orgb5503d6">
+<p>
+Vi husker lige, at vi skal omskrive
+\[\frac{1+a}{3 \left( 2+1 \right)} \cdot \frac{2}{a}\]
+</p>
+
+<p>
+til en enkelt brøk. Vi kan jo forsøge os med <code>sp.cancel()</code>
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr"> 2: </span><span style="color: #989898;"># </span><span style="color: #989898;">a defineres til at v&#230;re et symbol</span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">a</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"a"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="color: #989898;"># </span><span style="color: #989898;">Nu oprettes et udtryk</span>
+<span class="linenr"> 6: </span><span style="color: #989898;"># </span><span style="color: #989898;">L&#230;g m&#230;rke til at alle gangetegn skal skrives ind.</span>
+<span class="linenr"> 7: </span><span style="color: #00d3d0;">udtryk_b</span> = <span style="color: #ffffff;">(</span>1+a<span style="color: #ffffff;">)</span>/<span style="color: #ffffff;">(</span>3*<span style="color: #ff66ff;">(</span>2+1<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>*2/a
+<span class="linenr"> 8: </span><span style="color: #989898;"># </span><span style="color: #989898;">Nedenfor printes udtrykket ud p&#229; en "p&#230;n" m&#229;de</span>
+<span class="linenr"> 9: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Oprindeligt udtryk"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">10: </span>sp.pprint<span style="color: #ffffff;">(</span>udtryk_b<span style="color: #ffffff;">)</span>
+<span class="linenr">11: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Fors&#248;g med at omskrive til en enkelt br&#248;k"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">12: </span>sp.pprint<span style="color: #ffffff;">(</span>sp.cancel<span style="color: #ff66ff;">(</span>udtryk_b<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="orge56654d">
+Oprindeligt udtryk
+2⋅a   2
+─── + ─
+ 9    9
+───────
+   a   
+Forsøg med at omskrive til en enkelt brøk
+2⋅a + 2
+───────
+  9⋅a  
+</pre>
+
+<p>
+Jo, mindsandten. Det ser ud til at virke.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org04ea998" class="outline-3">
+<h3 id="org04ea998">Opgaver</h3>
+<div class="outline-text-3" id="text-org04ea998">
+<p>
+nu er det jeres tur. I skal løse følgende opgaver vha sympy. I må gerne løse dem allesammen i samme pythonskript, bare I sørger for at printe relevant information ud også. Sørg selv for at definere de relevante symboler. Eksperimenter med de forskellige funktioner i sympy, så I får det rette svar på opgaverne.
+</p>
+
+<p>
+Saml følgende udtryk på en brøkstreg:
+</p>
+
+<ol class="org-ol">
+<li>\(\frac{5}{(-7)}- 2/(3+a)\)</li>
+<li>\(\frac{\frac{4a}{b}}{\frac{b}{c}}\)</li>
+</ol>
+
+<p>
+Ophæv følgende parenteser:
+</p>
+
+<ol class="org-ol">
+<li value="3">\((5b+a)^2\)</li>
+<li>\(\left( 1+ \frac{a}{b} \right) \left( 1 + a \right)\)</li>
+<li>\(\left( \frac{b}{a}- \frac{a}{b} \right)^2\)</li>
+</ol>
+
+<p>
+Udvid følgende logaritmeudtryk:
+</p>
+
+<ol class="org-ol">
+<li value="6">\(\log \left( x\cdot y \right)\)</li>
+<li>\(\log \left( \frac{3 \cdot x^{1.5}}{y} \right)\)</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="outline-container-orgaf4c2e0" class="outline-2">
+<h2 id="orgaf4c2e0">Løsning af ligninger</h2>
+<div class="outline-text-2" id="text-orgaf4c2e0">
+<p>
+I matematiske fag anvender lighedstegnet (=) til at opbygge ligninger. I programmering og dermed også i python anvendes lighedstegnet som tildelingsoperator, altså til f.eks. at oprette variable <code>a = 3</code>. Af den grund kan man ikke anvende lighedstegnet, når man skal oprette ligninger i sympy.
+</p>
+
+<p>
+Man kunne tro, at man i stedet kunne anvende <code>==</code> til ligninger, men <code>==</code> anvendes i python til at <b>teste</b> for lighed. Der returneres altså altid <code>True</code> eller <code>False</code>, når vi anvender <code>==</code> i python.
+</p>
+
+<p>
+Måden dette er løst på i sympy, er ved at anvende funktionen <code>sp.Eq()</code>, som står for <i>Equation</i>.
+</p>
+</div>
+
+<div id="outline-container-org0111ecd" class="outline-3">
+<h3 id="org0111ecd">Algebraiske løsninger</h3>
+<div class="outline-text-3" id="text-org0111ecd">
+<p>
+Til at løse ligninger har sympy som udgangspunkt to funktioner til rådighed nemlig <code>sp.solve()</code> og <code>sp.solveset()</code>.
+</p>
+
+<dl class="org-dl">
+<dt><code>sp.solve()</code></dt><dd>kan løse ligninger, men returnerer f.eks. ikke noget, hvis der ikke er en løsning.</dd>
+
+<dt><code>sp.solveset()</code></dt><dd>løser også ligningerne, men returnerer <b>altid</b> et sæt af ligninger, også selvom der ikke er nogen løsning, altså et tomt sæt. Dermed er det nmmere at håndtere returværdier fra <code>sp.solveset()</code> som en del af større programmeringsprojekter.</dd>
+</dl>
+
+<p>
+Lad os se på nogle eksempler, som vi kan løse
+</p>
+
+<ul class="org-ul">
+<li>\(3x-2(x+1) = 2x\)</li>
+<li>\(\frac{2}{x+1} = \frac{1}{x-1}\)</li>
+</ul>
+
+
+<p>
+Begge ligninger kan vi selvfølgelig løse i hånden, men lad os gøre det vha sympy.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #989898;"># </span><span style="color: #989898;">Gemmer ligning 1</span>
+<span class="linenr">4: </span><span style="color: #00d3d0;">ligning_1</span> = sp.Eq<span style="color: #ffffff;">(</span>3*x-2*<span style="color: #ff66ff;">(</span>x+1<span style="color: #ff66ff;">)</span>, 2<span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span><span style="color: #00d3d0;">loesning_1_med_solve</span> = sp.solve<span style="color: #ffffff;">(</span>ligning_1, x<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span>sp.pprint<span style="color: #ffffff;">(</span>loesning_1_med_solve<span style="color: #ffffff;">)</span>
+<span class="linenr">7: </span><span style="color: #00d3d0;">loesning_1_med_solveset</span> = sp.solveset<span style="color: #ffffff;">(</span>ligning_1, x<span style="color: #ffffff;">)</span>
+<span class="linenr">8: </span>sp.pprint<span style="color: #ffffff;">(</span>loesning_1_med_solveset<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org3e55523">
+[4]
+{4}
+</pre>
+
+<p>
+I kan se forskellen i de to løsninger ved at <code>sp.solve()</code> har returneret en liste, mens <code>sp.solveset()</code> har returneret et set (som det kan ses af navnet).
+</p>
+
+<p>
+Lad os nu løse den anden ligning
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #989898;"># </span><span style="color: #989898;">Gemmer ligning 1</span>
+<span class="linenr">4: </span><span style="color: #00d3d0;">ligning_2</span> = sp.Eq<span style="color: #ffffff;">(</span>2/<span style="color: #ff66ff;">(</span>x+1<span style="color: #ff66ff;">)</span>, 1/<span style="color: #ff66ff;">(</span>x-1<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span><span style="color: #00d3d0;">loesning_2_med_solveset</span> = sp.solveset<span style="color: #ffffff;">(</span>ligning_2, x<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span>sp.pprint<span style="color: #ffffff;">(</span>loesning_2_med_solveset<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org3624147">
+{3}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgee17ac3" class="outline-3">
+<h3 id="orgee17ac3">Opgaver</h3>
+<div class="outline-text-3" id="text-orgee17ac3">
+<p>
+I skal nu løse følgende ligninger vha <code>sympy</code>.
+</p>
+
+<ol class="org-ol">
+<li>\(\frac{1}{x-1}= 2x -3\)</li>
+<li>\(\frac{x}{x+1} +1 = \frac{1}{x+1}-1\)</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-org45251c6" class="outline-3">
+<h3 id="org45251c6">Numeriske løsninger</h3>
+<div class="outline-text-3" id="text-org45251c6">
+<p>
+Alle de viste eksempler om løsning af ligninger tager udgangspunkt i ligninger, som har algebraiske løsninger. Der findes dog også ligninger, som kun har <i>numeriske</i> løsninger.
+Af eksempler kan nævnes
+</p>
+
+<ul class="org-ul">
+<li>\(e^x = x+2\)</li>
+<li>\(\cos(x) = \frac{1}{4}x\)</li>
+</ul>
+
+<p>
+For at kunne løse ligninger numerisk skal man anvende <code>sp.nsolve()</code>. Man skal være obmærksom på, at man skal give et <i>gæt</i> som ekstra argument til <code>sp.nsolve()</code>. For at kunne gøre dette, hjælper det at plotte de to sider af ligningerne som hver deres funktioner, og så se, hvor de to funktioner skærer hinanden. I det følgende kan I se, hvordan man kan løse ligningen
+</p>
+
+<p>
+\[e^x = x+2\,.\]
+</p>
+
+<p>
+Først plottes de to sider af ligningen, som hver deres funktion. For nu anvendes geogebra bare til det.
+</p>
+
+
+<div id="orge9e2ce4" class="figure">
+<p><img src="./img/numerisk_ligning.png" alt="numerisk_ligning.png" />
+</p>
+</div>
+
+<p>
+Ud fra dette plot kan det ses, at der er løsninger omkring henholdsvis \(x=-2\) og \(x=1\). I de følgende to pythoneksempler kan I se de numeriske løsninger til ligningen.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">ligning</span> = sp.Eq<span style="color: #ffffff;">(</span>sp.exp<span style="color: #ff66ff;">(</span>x<span style="color: #ff66ff;">)</span>,x+2<span style="color: #ffffff;">)</span>
+<span class="linenr">4: </span><span style="color: #00d3d0;">loesning_1</span> = sp.nsolve<span style="color: #ffffff;">(</span>ligning,x,-2<span style="color: #ffffff;">)</span> <span style="color: #989898;"># </span><span style="color: #989898;">L&#230;g m&#230;rke til -2 som sidste argument</span>
+<span class="linenr">5: </span>sp.pprint<span style="color: #ffffff;">(</span>loesning_1<span style="color: #ffffff;">)</span>
+<span class="linenr">6: </span><span style="color: #00d3d0;">loesning_2</span> = sp.nsolve<span style="color: #ffffff;">(</span>ligning,x,1<span style="color: #ffffff;">)</span> <span style="color: #989898;"># </span><span style="color: #989898;">L&#230;g m&#230;rke til 1 som sidste argument</span>
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>loesning_2<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="orgb4be39b">
+-1.84140566043696
+1.14619322062058
+</pre>
+
+<p>
+Det ser sørme ud til at sympy er enig med geogebra. :)
+</p>
+
+<p>
+Hvis man kan se, at der er <i>mange</i> numeriske løsninger til en ligning, så kan man med fordel anvende lister med gæt og løkker til at finde alle løsningerne. Her er et eksempel, som løser den samme ligning som før bare med lister og løkker.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">ligning</span> = sp.Eq<span style="color: #ffffff;">(</span>sp.exp<span style="color: #ff66ff;">(</span>x<span style="color: #ff66ff;">)</span>,x+2<span style="color: #ffffff;">)</span>
+<span class="linenr">4: </span><span style="color: #00d3d0;">startgaet</span> = <span style="color: #ffffff;">[</span>-2,1<span style="color: #ffffff;">]</span> <span style="color: #989898;"># </span><span style="color: #989898;">Her gemmes de samme startg&#230;t som i forrige script</span>
+<span class="linenr">5: </span><span style="color: #00d3d0;">loesninger</span> = <span style="color: #ffffff;">[]</span>
+<span class="linenr">6: </span><span style="color: #b6a0ff;">for</span> gaet <span style="color: #b6a0ff;">in</span> startgaet: <span style="color: #989898;"># </span><span style="color: #989898;">Der itereres over alle startg&#230;t</span>
+<span class="linenr">7: </span>    <span style="color: #00d3d0;">loesning</span> = sp.nsolve<span style="color: #ffffff;">(</span>ligning, x, gaet<span style="color: #ffffff;">)</span>
+<span class="linenr">8: </span>    loesninger.append<span style="color: #ffffff;">(</span>loesning<span style="color: #ffffff;">)</span>
+<span class="linenr">9: </span>sp.pprint<span style="color: #ffffff;">(</span>loesninger<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="orgba90d40">
+[-1.84140566043696, 1.14619322062058]
+</pre>
+
+<p>
+For at gøre scriptet endnu kortere kan man også anvende list comprehensions til. Det kan se nogenlunde således ud:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">ligning</span> = sp.Eq<span style="color: #ffffff;">(</span>sp.exp<span style="color: #ff66ff;">(</span>x<span style="color: #ff66ff;">)</span>,x+2<span style="color: #ffffff;">)</span>
+<span class="linenr">4: </span><span style="color: #00d3d0;">startgaet</span> = <span style="color: #ffffff;">[</span>-2,1<span style="color: #ffffff;">]</span> <span style="color: #989898;"># </span><span style="color: #989898;">Her gemmes de samme startg&#230;t som i forrige script</span>
+<span class="linenr">5: </span><span style="color: #989898;"># </span><span style="color: #989898;">Her opbygges listen med l&#248;sninger vha list comprehension</span>
+<span class="linenr">6: </span><span style="color: #00d3d0;">loesninger</span> = <span style="color: #ffffff;">[</span>sp.nsolve<span style="color: #ff66ff;">(</span>ligning,x,gaet<span style="color: #ff66ff;">)</span> <span style="color: #b6a0ff;">for</span> gaet <span style="color: #b6a0ff;">in</span> startgaet<span style="color: #ffffff;">]</span> 
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>loesninger<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org1e0fab5">
+[-1.84140566043696, 1.14619322062058]
+</pre>
+
+<p>
+Som I kan se, giver alle tre eksempler de samme svar, og svarene er enige med den grafiske løsning i geogebra.
+</p>
+
+<p>
+Yderligere information om løsning af ligninger vha sympy kan findes her: <a href="https://docs.sympy.org/latest/guides/solving/index.html#solving-guide">https://docs.sympy.org/latest/guides/solving/index.html#solving-guide</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org58b0725" class="outline-3">
+<h3 id="org58b0725">Opgave</h3>
+<div class="outline-text-3" id="text-org58b0725">
+<p>
+I skal nu finde løsningerne til ligningen
+</p>
+
+<p>
+\[\cos(x) = \frac{1}{4}x\,.\]
+</p>
+
+<ul class="org-ul">
+<li>Plot de to sider ligningen hver for sig i f.eks. geogebra, for at finde frem til relevante startgæt.</li>
+<li>Skriv jeres eget pythonscript, som anvender <code>sympy</code> til at løse ligningen.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgeb33311" class="outline-2">
+<h2 id="orgeb33311">Funktioner</h2>
+<div class="outline-text-2" id="text-orgeb33311">
+<p>
+Funktioner kan behandles på flere måder i sympy. Den simpleste måde er blot at opskrive funktionen som et udtryk. Hvis man gerne vil udregne (mange) funktionsværdier kan man anvende metoden <code>subs()</code>. <code>subs</code> står for <i>substitute</i>, hvor man kan udskifte et symbol med et andet symbol eller en numerisk værdi f.eks.
+</p>
+
+<p>
+Lad os antage at vi har funktionen
+</p>
+
+<p>
+\[f(x) = x^2+x-2\,,\]
+</p>
+
+<p>
+og vi skal finde alle funktionsværdierne når x-værdierne er \({-5, -2, -1, 1, 4, 7}\).
+</p>
+
+<p>
+Kan kunne så anvende f.eks. følgende script
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">x_vaerdier</span> = <span style="color: #ffffff;">[</span>-5,-2,-1,1,4,7<span style="color: #ffffff;">]</span>
+<span class="linenr">4: </span><span style="color: #00d3d0;">f</span> = x**2+x-2
+<span class="linenr">5: </span><span style="color: #b6a0ff;">for</span> x_vaerdi <span style="color: #b6a0ff;">in</span> x_vaerdier:
+<span class="linenr">6: </span>    sp.pprint<span style="color: #ffffff;">(</span>f.subs<span style="color: #ff66ff;">(</span>x, x_vaerdi<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org8e6d727">
+18
+0
+-2
+0
+18
+54
+</pre>
+
+<p>
+Man kunne også have anvendt list comprehensions igen:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">x_vaerdier</span> = <span style="color: #ffffff;">[</span>-5,-2,-1,1,4,7<span style="color: #ffffff;">]</span>
+<span class="linenr">4: </span><span style="color: #00d3d0;">f</span> = x**2+x-2
+<span class="linenr">5: </span><span style="color: #00d3d0;">funktionsvaerdier</span> = <span style="color: #ffffff;">[</span>f.subs<span style="color: #ff66ff;">(</span>x, x_vaerdi<span style="color: #ff66ff;">)</span> <span style="color: #b6a0ff;">for</span> x_vaerdi <span style="color: #b6a0ff;">in</span> x_vaerdier<span style="color: #ffffff;">]</span>
+<span class="linenr">6: </span>sp.pprint<span style="color: #ffffff;">(</span>funktionsvaerdier<span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+<pre class="example" id="org1a8e0bd">
+[18, 0, -2, 0, 18, 54]
+</pre>
+
+<p>
+I sympy er der også en funktion, som hedder <code>sp.Function()</code>. Denne anvendes til at arbejde med <i>udefinerede</i> funktioner. Det kunne f.eks. være, hvis man skal løse en differentialligning, hvor man på forhånd ikke kender forskriften på en funktion, men løsningen til differentialligningen netop er en funktionsforskrift. Dette regner jeg dog ikke med, at vi skal arbejde med i programmering.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6c10d6c" class="outline-2">
+<h2 id="org6c10d6c">Infinitesimalregning</h2>
+<div class="outline-text-2" id="text-org6c10d6c">
+<p>
+Mmm sikke et dejligt ord. Prøv lige at smage på det. :) I stedet kunne man have skrevet differential- og integralregning. Lad os kort se på, hvordan man differentiere og integrere vha sympy.
+</p>
+</div>
+
+<div id="outline-container-org34bb4d4" class="outline-3">
+<h3 id="org34bb4d4">Differentialregning</h3>
+<div class="outline-text-3" id="text-org34bb4d4">
+<p>
+I kender jo allerede alt til differentialregning, og hvad det går ud på, så lad os bare tage udgangspunkt i et eksempel. Vi vil gerne differentiere følgende (besværlige) funktion
+</p>
+
+<p>
+\[f(x) = \frac{3 x^2-\sqrt{x}}{2+x}\,.\]
+</p>
+
+<p>
+Dette kan vi gøre med funktionen <code>sp.diff()</code>, som deler navn med en tilsvarende metode. Lad os se hvordan det virker.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">f</span> = <span style="color: #ffffff;">(</span>3*x**2 - sp.sqrt<span style="color: #ff66ff;">(</span>x<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>/<span style="color: #ffffff;">(</span>2+x<span style="color: #ffffff;">)</span>
+<span class="linenr">4: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Med funktionen sp.diff"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>sp.pprint<span style="color: #ffffff;">(</span>sp.diff<span style="color: #ff66ff;">(</span>f,x,1<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span> <span style="color: #989898;"># </span><span style="color: #989898;">l&#230;g m&#230;rke til x og 1 som de sidste argumenter.</span>
+<span class="linenr">6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Med metoden .diff"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">7: </span>sp.pprint<span style="color: #ffffff;">(</span>f.diff<span style="color: #ff66ff;">(</span>x,1<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span> <span style="color: #989898;"># </span><span style="color: #989898;">L&#230;g m&#230;rke til x og 1 som de sidste argumenter.</span>
+</pre>
+</div>
+
+<pre class="example" id="org6596fa4">
+Med funktionen sp.diff
+                      1  
+           2   6⋅x - ────
+  -√x + 3⋅x          2⋅√x
+- ────────── + ──────────
+          2      x + 2   
+   (x + 2)               
+Med metoden .diff
+                      1  
+           2   6⋅x - ────
+  -√x + 3⋅x          2⋅√x
+- ────────── + ──────────
+          2      x + 2   
+   (x + 2)               
+</pre>
+
+<p>
+For både funktione og metoden gælder det, at man skal angive, hvilken variabel man differentiere med hensyn til og hvor mange gange, man vil differentiere. I det forrige eksempel var det variablen <code>x</code> og vi differentierede kun én gang. Hvis man kun vil differentiere én gang, kan man udelade det sidste argument.
+</p>
+
+<p>
+Hvis man bare gerne vil vise, at man skal differentiere et udtryk, men rent faktisk ikke vil gøre det med det samme, skal man anvende funktionen <code>sp.Derivative</code>. Lad os se, hvordan det virker:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr"> 2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">f</span> = <span style="color: #ffffff;">(</span>3*x**2 - sp.sqrt<span style="color: #ff66ff;">(</span>x<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>/<span style="color: #ffffff;">(</span>2+x<span style="color: #ffffff;">)</span>
+<span class="linenr"> 4: </span><span style="color: #989898;">#</span><span style="color: #989898;">fm st&#229;r for f m&#230;rke</span>
+<span class="linenr"> 5: </span><span style="color: #00d3d0;">fm</span> = sp.Derivative<span style="color: #ffffff;">(</span>f,x<span style="color: #ffffff;">)</span>
+<span class="linenr"> 6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Viser bare at vi vil differentiere:"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span>sp.pprint<span style="color: #ffffff;">(</span>fm<span style="color: #ffffff;">)</span>
+<span class="linenr"> 8: </span><span style="color: #989898;"># </span><span style="color: #989898;">Hvis man gerne vil udf&#248;re differentiationen kan man anvende metoden</span>
+<span class="linenr"> 9: </span><span style="color: #989898;"># </span><span style="color: #989898;">.doit()</span>
+<span class="linenr">10: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Her er resultatet af differentiationen:"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">11: </span>sp.pprint<span style="color: #ffffff;">(</span>fm.doit<span style="color: #ff66ff;">()</span><span style="color: #ffffff;">)</span>
+<span class="linenr">12: </span>
+</pre>
+</div>
+
+<pre class="example" id="org24b1ec6">
+Viser bare at vi vil differentiere:
+  ⎛         2⎞
+d ⎜-√x + 3⋅x ⎟
+──⎜──────────⎟
+dx⎝  x + 2   ⎠
+Her er resultatet af differentiationen:
+                      1  
+           2   6⋅x - ────
+  -√x + 3⋅x          2⋅√x
+- ────────── + ──────────
+          2      x + 2   
+   (x + 2)               
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgabebb09" class="outline-3">
+<h3 id="orgabebb09">Opgaver</h3>
+<div class="outline-text-3" id="text-orgabebb09">
+<p>
+I skal nu finde de afledte funktioner til følgende funktioner vha sympy. Se om I ikke kan finde alle tre afledte funktioner i ét script.
+</p>
+
+\begin{align*}
+f(x) &= \left( 8x^4+4 \right)\cdot \left( 3x^3-2x+7 \right) \\
+g(x) &= \frac{-3x^2-5x-6}{x-7} \\
+h(x) &= \sqrt{9x} - \frac{4}{x}
+\end{align*}
+</div>
+</div>
+
+<div id="outline-container-org82db4c3" class="outline-3">
+<h3 id="org82db4c3">Integralregning</h3>
+<div class="outline-text-3" id="text-org82db4c3">
+<p>
+På samme måde som der indenfor differentialregning er <code>sp.diff</code> og <code>sp.Derivative</code>, så er der <code>sp.integrate</code> og <code>sp.Integral</code> inden for integralregningen i sympy.
+</p>
+</div>
+
+<div id="outline-container-orgd1090ec" class="outline-4">
+<h4 id="orgd1090ec">Stamfunktioner</h4>
+<div class="outline-text-4" id="text-orgd1090ec">
+<p>
+Vi tager udgangspunkt i funktionen
+</p>
+
+<p>
+\[f(x) = x^3 \left( x-1 \right)\,,\]
+</p>
+
+<p>
+som vi gerne vil finde stamfunktionen for. Det kan gøres på følgende måde
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr"> 2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">f</span> = x**3 * <span style="color: #ffffff;">(</span>x-1<span style="color: #ffffff;">)</span>
+<span class="linenr"> 4: </span><span style="color: #989898;"># </span><span style="color: #989898;">Med F menes stamfunktion til f</span>
+<span class="linenr"> 5: </span><span style="color: #00d3d0;">F</span> = sp.integrate<span style="color: #ffffff;">(</span>f,x<span style="color: #ffffff;">)</span>
+<span class="linenr"> 6: </span>sp.pprint<span style="color: #ffffff;">(</span>F<span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span><span style="color: #989898;"># </span><span style="color: #989898;">Vi viser kun, at vi har t&#230;nkt os at integrere</span>
+<span class="linenr"> 8: </span><span style="color: #00d3d0;">F</span> = sp.Integral<span style="color: #ffffff;">(</span>f,x<span style="color: #ffffff;">)</span>
+<span class="linenr"> 9: </span>sp.pprint<span style="color: #ffffff;">(</span>F<span style="color: #ffffff;">)</span>
+<span class="linenr">10: </span><span style="color: #989898;"># </span><span style="color: #989898;">Vi printer det faktiske integral ud</span>
+<span class="linenr">11: </span>sp.pprint<span style="color: #ffffff;">(</span>F.doit<span style="color: #ff66ff;">()</span><span style="color: #ffffff;">)</span>
+<span class="linenr">12: </span>
+</pre>
+</div>
+
+<pre class="example" id="orgbd3a67c">
+ 5    4
+x    x 
+── - ──
+5    4 
+⌠              
+⎮  3           
+⎮ x ⋅(x - 1) dx
+⌡              
+ 5    4
+x    x 
+── - ──
+5    4 
+</pre>
+
+<p>
+For alle stamfunktioner skal I lægge mærke til at der <b>ikke</b> inkluderes en integrationskonstant, men det er sympy ikke det eneste CAS-værktøj, som undlader.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4ab4d95" class="outline-4">
+<h4 id="org4ab4d95">Bestemte integraler</h4>
+<div class="outline-text-4" id="text-org4ab4d95">
+<p>
+Som bekendt kan integralregning anvendes til finde arealer under kurver, hvilket kaldes besteme integraler. Med bestemte integraler skal man inkludere nedre og øvre integrationsgrænser. I sympy foregår det ved at indsætte en <code>tuple</code> indeholdende integrationsvariabel, nedre grænse og øvre grænse.
+</p>
+
+<p>
+I det følgende tages der udgangspunkt i forrige funktion, som nu vil blive integreret fra 1 til 2:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr"> 2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">f</span> = x**3 * <span style="color: #ffffff;">(</span>x-1<span style="color: #ffffff;">)</span>
+<span class="linenr"> 4: </span><span style="color: #00d3d0;">bestemt_integral</span> = sp.integrate<span style="color: #ffffff;">(</span>f,<span style="color: #ff66ff;">(</span>x, 1, 2<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span> <span style="color: #989898;"># </span><span style="color: #989898;">tuplen er (x, 1, 2)</span>
+<span class="linenr"> 5: </span>sp.pprint<span style="color: #ffffff;">(</span>bestemt_integral<span style="color: #ffffff;">)</span>
+<span class="linenr"> 6: </span><span style="color: #989898;"># </span><span style="color: #989898;">Vi vil gerne have svaret i decimaltal</span>
+<span class="linenr"> 7: </span><span style="color: #989898;"># </span><span style="color: #989898;">Vi bruger metoden .evalf()</span>
+<span class="linenr"> 8: </span>sp.pprint<span style="color: #ffffff;">(</span>bestemt_integral.evalf<span style="color: #ff66ff;">(</span>4<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span> <span style="color: #989898;"># </span><span style="color: #989898;">Vi vil kun have 4 betydende cifre</span>
+<span class="linenr"> 9: </span><span style="color: #989898;"># </span><span style="color: #989898;">Vi kan igen blot vise, at vi vil udf&#248;re et bestemt integral</span>
+<span class="linenr">10: </span><span style="color: #00d3d0;">bestemt_integral</span> = sp.Integral<span style="color: #ffffff;">(</span>f,<span style="color: #ff66ff;">(</span>x, 1, 2<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr">11: </span>sp.pprint<span style="color: #ffffff;">(</span>bestemt_integral<span style="color: #ffffff;">)</span>
+<span class="linenr">12: </span><span style="color: #989898;"># </span><span style="color: #989898;">Vi printer det faktiske integral ud</span>
+<span class="linenr">13: </span>sp.pprint<span style="color: #ffffff;">(</span>bestemt_integral.doit<span style="color: #ff66ff;">()</span>.evalf<span style="color: #ff66ff;">(</span>4<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr">14: </span>
+</pre>
+</div>
+
+<pre class="example" id="org65f842b">
+49
+──
+20
+2.450
+2              
+⌠              
+⎮  3           
+⎮ x ⋅(x - 1) dx
+⌡              
+1              
+2.450
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org8cf75ef" class="outline-4">
+<h4 id="org8cf75ef">Opgaver</h4>
+<div class="outline-text-4" id="text-org8cf75ef">
+<p>
+Udfør følgende ubestemte integraler (altså find stamfunktionerne) vha sympy. \(e^x\) kan skrives som <code>sp.exp(x)</code> i sympy, mens eulers tal \(e=2.71\dots\) kan skrives som <code>sp.E</code>.
+</p>
+
+\begin{align*}
+&\int 3 x^{-8}- \frac{1}{x}+8 \,dx \\
+&\int e^x - x^e \,dx
+\end{align*}
+
+<p>
+Udfør følgende bestemte integraler (altså find arealet under kurven).
+</p>
+
+\begin{align*}
+&\int_1^2 \frac{x^2-x}{x} \,dx \\
+&\int_0^1 x^2+1 \,dx
+\end{align*} 
+
+<p>
+<b>Ekstra udfordring</b>.
+</p>
+
+<p>
+Bestem \(a\) i følgende ligning:
+</p>
+
+<p>
+\[\int_{-a}^{10} x^a \,dx = 1\]
+</p>
+
+<p>
+Hint til udfordringen: I skal anvende både integration og løsning af ligninger.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd03e4a8" class="outline-2">
+<h2 id="orgd03e4a8">Plot af grafer</h2>
+<div class="outline-text-2" id="text-orgd03e4a8">
+<p>
+Sympy har sit eget plotte-modul, som kan anvende forskellige backends herunder <code>matplotlib</code>. Vi har tidligere arbejdet med <code>matplotlib</code>, så vi tager udgangspunkt i det. Sørg derfor for at have <code>matplotlib</code> installeret i samme virtuelle miljø som <code>sympy</code>.
+</p>
+</div>
+
+<div id="outline-container-org504240d" class="outline-3">
+<h3 id="org504240d">Direkte med sympy</h3>
+<div class="outline-text-3" id="text-org504240d">
+<p>
+En generel introduktion til at plotte vha sympy kan findes her: <a href="https://docs.sympy.org/latest/modules/plotting.html">https://docs.sympy.org/latest/modules/plotting.html</a>
+</p>
+
+<p>
+Her er et udsnit af dokumentationen af brugen af <code>plot</code>-funktionen i sympy.
+</p>
+
+<blockquote>
+<p>
+sympy.plotting.plot.plot(*args, show=True, **kwargs)[source]
+</p>
+
+<p>
+Plots a function of a single variable as a curve.
+</p>
+
+<p>
+<b>Parameters:</b>
+</p>
+
+<dl class="org-dl">
+<dt>args</dt><dd><p>
+The first argument is the expression representing the function of single variable to be plotted.
+</p>
+
+<p>
+The last argument is a 3-tuple denoting the range of the free variable. e.g. <code>(x, 0, 5)</code>
+</p>
+
+<p>
+Typical usage examples are in the following:
+</p>
+
+<ul class="org-ul">
+<li><p>
+Plotting a single expression with a single range.
+</p>
+
+<p>
+<code>plot(expr, range, **kwargs)</code>
+</p></li>
+
+<li><p>
+Plotting a single expression with the default range (-10, 10).
+</p>
+
+<p>
+<code>plot(expr, **kwargs)</code>
+</p></li>
+
+<li><p>
+Plotting multiple expressions with a single range.
+</p>
+
+<p>
+<code>plot(expr1, expr2, ..., range, **kwargs)</code>
+</p></li>
+
+<li><p>
+Plotting multiple expressions with multiple ranges.
+</p>
+
+<p>
+<code>plot((expr1, range1), (expr2, range2), ..., **kwargs)</code>
+</p></li>
+</ul></dd>
+</dl>
+
+
+<p>
+It is best practice to specify range explicitly because default range may change in the future if a more advanced default range detection algorithm is implemented.
+</p>
+
+<dl class="org-dl">
+<dt>show</dt><dd><p>
+bool, optional
+</p>
+
+<p>
+The default value is set to <code>True</code>. Set show to <code>False</code> and the function will not display the plot. The returned instance of the Plot class can then be used to save or display the plot by calling the <code>save()</code> and <code>show()</code> methods respectively.
+</p></dd>
+
+<dt>line_color</dt><dd><p>
+string, or float, or function, optional
+</p>
+
+<p>
+Specifies the color for the plot. See Plot to see how to set color for the plots. Note that by setting <code>line_color</code>, it would be applied simultaneously to all the series.
+</p></dd>
+
+<dt>title</dt><dd><p>
+str, optional
+</p>
+
+<p>
+Title of the plot. It is set to the latex representation of the expression, if the plot has only one expression.
+</p></dd>
+
+<dt>label</dt><dd><p>
+str, optional
+</p>
+
+<p>
+The label of the expression in the plot. It will be used when called with <code>legend</code>. Default is the name of the expression. e.g. <code>sin(x)</code>
+</p></dd>
+
+<dt>xlabel</dt><dd><p>
+str or expression, optional
+</p>
+
+<p>
+Label for the x-axis.
+</p></dd>
+
+<dt>ylabel</dt><dd><p>
+str or expression, optional
+</p>
+
+<p>
+Label for the y-axis.
+</p></dd>
+
+<dt>xscale</dt><dd><p>
+‘linear’ or ‘log’, optional
+</p>
+
+<p>
+Sets the scaling of the x-axis.
+</p></dd>
+
+<dt>yscale</dt><dd><p>
+‘linear’ or ‘log’, optional
+</p>
+
+<p>
+Sets the scaling of the y-axis.
+</p></dd>
+
+<dt>axis_center</dt><dd><p>
+(float, float), optional
+</p>
+
+<p>
+Tuple of two floats denoting the coordinates of the center or {‘center’, ‘auto’}
+</p></dd>
+
+<dt>xlim</dt><dd><p>
+(float, float), optional
+</p>
+
+<p>
+Denotes the x-axis limits, <code>(min, max)</code>.
+</p></dd>
+
+<dt>ylim</dt><dd><p>
+(float, float), optional
+</p>
+
+<p>
+Denotes the y-axis limits, <code>(min, max)</code>.
+</p></dd>
+
+<dt>annotations</dt><dd><p>
+list, optional
+</p>
+
+<p>
+A list of dictionaries specifying the type of annotation required. The keys in the dictionary should be equivalent to the arguments of the <code>matplotlib</code>'s <code>annotate()</code> method.
+</p></dd>
+
+<dt>markers</dt><dd><p>
+list, optional
+</p>
+
+<p>
+A list of dictionaries specifying the type the markers required. The keys in the dictionary should be equivalent to the arguments of the <code>matplotlib</code>'s <code>plot()</code> function along with the marker related keyworded arguments.
+</p></dd>
+
+<dt>rectangles</dt><dd><p>
+list, optional
+</p>
+
+<p>
+A list of dictionaries specifying the dimensions of the rectangles to be plotted. The keys in the dictionary should be equivalent to the arguments of the <code>matplotlib</code>'s <code>Rectangle</code> class.
+</p></dd>
+
+<dt>fill</dt><dd><p>
+dict, optional
+</p>
+
+<p>
+A dictionary specifying the type of color filling required in the plot. The keys in the dictionary should be equivalent to the arguments of the <code>matplotlib</code>'s <code>fill_between()</code> method.
+</p></dd>
+
+<dt>adaptive</dt><dd><p>
+bool, optional
+</p>
+
+<p>
+The default value is set to <code>True</code>. Set adaptive to <code>False</code> and specify <code>nb_of_points</code> if uniform sampling is required.
+</p>
+
+<p>
+The plotting uses an adaptive algorithm which samples recursively to accurately plot. The adaptive algorithm uses a random point near the midpoint of two points that has to be further sampled. Hence the same plots can appear slightly different.
+</p></dd>
+
+<dt>depth</dt><dd><p>
+int, optional
+</p>
+
+<p>
+Recursion depth of the adaptive algorithm. A depth of value \(n\) samples a maximum of \(2^n\) points.
+</p>
+
+<p>
+If the <code>adaptive</code> flag is set to <code>False</code>, this will be ignored.
+</p></dd>
+
+<dt>nb_of_points</dt><dd><p>
+int, optional
+</p>
+
+<p>
+Used when the <code>adaptive</code> is set to <code>False</code>. The function is uniformly sampled at <code>nb_of_points</code> number of points.
+</p>
+
+<p>
+If the adaptive flag is set to <code>True</code>, this will be ignored.
+</p></dd>
+
+<dt>size</dt><dd><p>
+(float, float), optional
+</p>
+
+<p>
+A tuple in the form (width, height) in inches to specify the size of the overall figure. The default value is set to <code>None</code>, meaning the size will be set by the default backend.
+</p></dd>
+</dl>
+</blockquote>
+
+<p>
+Her kommer en række eksempler.
+<b>En graf</b>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">funktion_1</span> = x**2
+<span class="linenr">4: </span>
+<span class="linenr">5: </span>sp.plot<span style="color: #ffffff;">(</span>funktion_1, <span style="color: #ff66ff;">(</span>x,-5, 5<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+
+<div id="org99a73fc" class="figure">
+<p><img src="./img/sp_en_graf.png" alt="sp_en_graf.png" />
+</p>
+</div>
+
+<p>
+<b>To grafer i samme x-interval</b>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">funktion_1</span> = x**2
+<span class="linenr">4: </span><span style="color: #00d3d0;">funktion_2</span> = x**3 -x +2
+<span class="linenr">5: </span>
+<span class="linenr">6: </span>sp.plot<span style="color: #ffffff;">(</span>funktion_1, funktion_2, <span style="color: #ff66ff;">(</span>x,-3, 3<span style="color: #ff66ff;">)</span>, legend=<span style="color: #00bcff;">True</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+
+<div id="orgd714426" class="figure">
+<p><img src="./img/sp_to_grafer_et_interval.png" alt="sp_to_grafer_et_interval.png" />
+</p>
+</div>
+
+<p>
+<b>Flere grafer med forskellige x-intervaller</b>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr">1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr">2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">3: </span><span style="color: #00d3d0;">funktion_1</span> = x**2 -2*x+2
+<span class="linenr">4: </span><span style="color: #00d3d0;">funktion_2</span> = sp.cos<span style="color: #ffffff;">(</span>x**2<span style="color: #ffffff;">)</span>
+<span class="linenr">5: </span>
+<span class="linenr">6: </span>sp.plot<span style="color: #ffffff;">(</span><span style="color: #ff66ff;">(</span>funktion_1, <span style="color: #00eff0;">(</span>x, -3, 3<span style="color: #00eff0;">)</span><span style="color: #ff66ff;">)</span>, <span style="color: #ff66ff;">(</span>funktion_2, <span style="color: #00eff0;">(</span>x,-2, 5<span style="color: #00eff0;">)</span><span style="color: #ff66ff;">)</span>, legend=<span style="color: #00bcff;">True</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+
+<div id="org67a8f73" class="figure">
+<p><img src="./img/sp_flere_grafer_forskellige_intervaller.png" alt="sp_flere_grafer_forskellige_intervaller.png" />
+</p>
+</div>
+
+<p>
+<b>En med næsten det hele, tak</b>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr"> 2: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 3: </span><span style="color: #00d3d0;">funktion_1</span> = x**2 -2*x+4
+<span class="linenr"> 4: </span><span style="color: #00d3d0;">funktion_2</span> = sp.cos<span style="color: #ffffff;">(</span>x**2<span style="color: #ffffff;">)</span> 
+<span class="linenr"> 5: </span>
+<span class="linenr"> 6: </span>sp.plot<span style="color: #ffffff;">(</span><span style="color: #ff66ff;">(</span>funktion_1, <span style="color: #00eff0;">(</span>x, -3, 3<span style="color: #00eff0;">)</span><span style="color: #ff66ff;">)</span>,
+<span class="linenr"> 7: </span>        <span style="color: #ff66ff;">(</span>funktion_2, <span style="color: #00eff0;">(</span>x,-2, 5<span style="color: #00eff0;">)</span><span style="color: #ff66ff;">)</span>,
+<span class="linenr"> 8: </span>        legend=<span style="color: #00bcff;">True</span>,
+<span class="linenr"> 9: </span>        title= <span style="color: #79a8ff;">"En med n&#230;sten det hele, tak"</span>,
+<span class="linenr">10: </span>        xlabel = <span style="color: #79a8ff;">"x-aksen"</span>,
+<span class="linenr">11: </span>        ylabel = <span style="color: #79a8ff;">"y-aksen"</span>,
+<span class="linenr">12: </span>        xlim = <span style="color: #ff66ff;">(</span>-5,7<span style="color: #ff66ff;">)</span>,
+<span class="linenr">13: </span>        ylim = <span style="color: #ff66ff;">(</span>- 3, 6<span style="color: #ff66ff;">)</span>,
+<span class="linenr">14: </span>        annotations = <span style="color: #ff66ff;">[</span><span style="color: #00eff0;">{</span><span style="color: #79a8ff;">"xy"</span>: <span style="color: #ff6b55;">(</span>1,3<span style="color: #ff6b55;">)</span>, <span style="color: #79a8ff;">"text"</span>: <span style="color: #79a8ff;">"Her er 'toppunktet'."</span>, <span style="color: #79a8ff;">"xytext"</span>: <span style="color: #ff6b55;">(</span>0,2<span style="color: #ff6b55;">)</span>, <span style="color: #79a8ff;">"arrowprops"</span>:<span style="color: #f78fe7;">dict</span><span style="color: #ff6b55;">(</span>arrowstyle=<span style="color: #79a8ff;">'-&gt;'</span>, lw=1<span style="color: #ff6b55;">)</span><span style="color: #00eff0;">}</span><span style="color: #ff66ff;">]</span>,
+<span class="linenr">15: </span>        markers = <span style="color: #ff66ff;">[</span><span style="color: #00eff0;">{</span><span style="color: #79a8ff;">"args"</span>:<span style="color: #ff6b55;">[</span>-2,3, <span style="color: #79a8ff;">'go'</span><span style="color: #ff6b55;">]</span><span style="color: #00eff0;">}</span><span style="color: #ff66ff;">]</span>,
+<span class="linenr">16: </span>        <span style="color: #ffffff;">)</span>
+</pre>
+</div>
+
+
+<div id="org6c273c0" class="figure">
+<p><img src="./img/en_med_naesten_det_hele_eksempel.png" alt="en_med_naesten_det_hele_eksempel.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb55bb78" class="outline-3">
+<h3 id="orgb55bb78">Kombination af sympy og matplotlib</h3>
+<div class="outline-text-3" id="text-orgb55bb78">
+<p>
+Hvis man skal udarbejde endnu mere avancerede plots eller ønsker endnu større frihed, er det en god idé at anvende <code>matplotlib</code>-funktionerne direkte i stedet for at bruge plottefunktionerne fra <code>sympy</code>. I det følgende eksempel kan det ses, hvordan plottet <i>en med næsten det hele, tak</i> fra tidligere kan dannes ved at kombinere sympy og matplotlib.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> matplotlib
+<span class="linenr"> 2: </span><span style="color: #b6a0ff;">import</span> matplotlib.pyplot <span style="color: #b6a0ff;">as</span> plt
+<span class="linenr"> 3: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="color: #989898;"># </span><span style="color: #989898;">Som set tidligere med anvendelse af sympy</span>
+<span class="linenr"> 6: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span><span style="color: #b6a0ff;">def</span> <span style="color: #feacd0;">flyt_sp_plot_til_ax</span><span style="color: #ffffff;">(</span>sp_plot, ax<span style="color: #ffffff;">)</span>:
+<span class="linenr">10: </span>    <span style="color: #9ac8e0;">"""Denne funktion tager et sympy-plot og en matplotlib ax som parameter,</span>
+<span class="linenr">11: </span><span style="color: #9ac8e0;">    og s&#248;rger for at inds&#230;tte sympy-plottet i det allerede eksisterende ax."""</span>
+<span class="linenr">12: </span>    <span style="color: #00d3d0;">backend</span> = sp_plot.backend<span style="color: #ffffff;">(</span>sp_plot<span style="color: #ffffff;">)</span>
+<span class="linenr">13: </span>    backend.<span style="color: #00d3d0;">ax</span> = ax
+<span class="linenr">14: </span>    backend._process_series<span style="color: #ffffff;">(</span>backend.parent._series, ax, backend.parent<span style="color: #ffffff;">)</span>
+<span class="linenr">15: </span>    backend.ax.spines<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"right"</span><span style="color: #ffffff;">]</span>.set_color<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"none"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">16: </span>    backend.ax.spines<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"bottom"</span><span style="color: #ffffff;">]</span>.set_position<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"zero"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">17: </span>    backend.ax.spines<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"top"</span><span style="color: #ffffff;">]</span>.set_color<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"none"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">18: </span>    plt.close<span style="color: #ffffff;">(</span>backend.fig<span style="color: #ffffff;">)</span>
+<span class="linenr">19: </span>
+<span class="linenr">20: </span>
+<span class="linenr">21: </span><span style="color: #989898;"># </span><span style="color: #989898;">Opretter figur og akse som set tidligere mens vi arbejdede med at plotte i matplotlib</span>
+<span class="linenr">22: </span><span style="color: #00d3d0;">fig</span>, <span style="color: #00d3d0;">ax</span> = plt.subplots<span style="color: #ffffff;">(</span>layout=<span style="color: #79a8ff;">"constrained"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">23: </span>
+<span class="linenr">24: </span><span style="color: #00d3d0;">funktion_1</span> = x**2 - 2 * x + 4
+<span class="linenr">25: </span><span style="color: #00d3d0;">plot_1</span> = sp.plot<span style="color: #ffffff;">(</span>funktion_1, <span style="color: #ff66ff;">(</span>x, -3, 3<span style="color: #ff66ff;">)</span>, legend=<span style="color: #00bcff;">True</span>, show=<span style="color: #00bcff;">False</span><span style="color: #ffffff;">)</span>
+<span class="linenr">26: </span>flyt_sp_plot_til_ax<span style="color: #ffffff;">(</span>plot_1, ax<span style="color: #ffffff;">)</span>
+<span class="linenr">27: </span>
+<span class="linenr">28: </span><span style="color: #00d3d0;">funktion_2</span> = sp.cos<span style="color: #ffffff;">(</span>x**2<span style="color: #ffffff;">)</span>
+<span class="linenr">29: </span><span style="color: #00d3d0;">plot_2</span> = sp.plot<span style="color: #ffffff;">(</span>funktion_2, <span style="color: #ff66ff;">(</span>x, -2, 5<span style="color: #ff66ff;">)</span>, legend=<span style="color: #00bcff;">True</span>, show=<span style="color: #00bcff;">False</span><span style="color: #ffffff;">)</span>
+<span class="linenr">30: </span>flyt_sp_plot_til_ax<span style="color: #ffffff;">(</span>plot_2, ax<span style="color: #ffffff;">)</span>
+<span class="linenr">31: </span>
+<span class="linenr">32: </span><span style="color: #00d3d0;">groent_punkt</span> = <span style="color: #ffffff;">(</span>-2, 3<span style="color: #ffffff;">)</span>
+<span class="linenr">33: </span><span style="color: #989898;"># </span><span style="color: #989898;">Det gr&#248;nne punkt plottes nu direkte gennem matplotlib i stedet for markers gennem sympy</span>
+<span class="linenr">34: </span>ax.plot<span style="color: #ffffff;">(</span>*groent_punkt, <span style="color: #79a8ff;">"go"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">35: </span>
+<span class="linenr">36: </span><span style="color: #989898;"># </span><span style="color: #989898;">Annotationen sker her direkte gennem matplotlib i stedet for gennem sympy</span>
+<span class="linenr">37: </span>ax.annotate<span style="color: #ffffff;">(</span>
+<span class="linenr">38: </span>    <span style="color: #79a8ff;">"Her er 'toppunktet'."</span>,
+<span class="linenr">39: </span>    <span style="color: #ff66ff;">(</span>1, 3<span style="color: #ff66ff;">)</span>,
+<span class="linenr">40: </span>    xytext=<span style="color: #ff66ff;">(</span>0, 2<span style="color: #ff66ff;">)</span>,
+<span class="linenr">41: </span>    arrowprops=<span style="color: #ff66ff;">{</span><span style="color: #79a8ff;">"arrowstyle"</span>: <span style="color: #79a8ff;">"-&gt;"</span>, <span style="color: #79a8ff;">"lw"</span>: 1<span style="color: #ff66ff;">}</span>,
+<span class="linenr">42: </span><span style="color: #ffffff;">)</span>
+<span class="linenr">43: </span>
+<span class="linenr">44: </span><span style="color: #989898;"># </span><span style="color: #989898;">Her s&#230;ttes aksetitler, aksegr&#230;nser og plottitel direkte i matplotlib i stedet for gennem sympy</span>
+<span class="linenr">45: </span>ax.set_xlabel<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x-aksen"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">46: </span>ax.set_ylabel<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"y-aksen"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">47: </span>ax.set_xlim<span style="color: #ffffff;">(</span>-5, 7<span style="color: #ffffff;">)</span>
+<span class="linenr">48: </span>ax.set_ylim<span style="color: #ffffff;">(</span>-3, 6<span style="color: #ffffff;">)</span>
+<span class="linenr">49: </span>ax.set_title<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"En med n&#230;sten det hele, tak</span><span style="color: #00bcff;">\n</span><span style="color: #79a8ff;">Matplotlib + sympy"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">50: </span>
+<span class="linenr">51: </span><span style="color: #989898;"># </span><span style="color: #989898;">Endelig plottes hele figuren gennem matplotlib</span>
+<span class="linenr">52: </span>plt.show<span style="color: #ffffff;">()</span>
+</pre>
+</div>
+
+
+<div id="orge711a47" class="figure">
+<p><img src="./img/en_med_naesten_det_hele_eksempel_matplotlib.png" alt="en_med_naesten_det_hele_eksempel_matplotlib.png" />
+</p>
+</div>
+
+<p>
+Pointen med at anvende <code>matplotlib</code> direkte er friheden det giver. Det er nu muligt at plotte både funktioner og punktserier i samme plot, og man kan anvende de redskaber, man allerede kender fra matplotlib.
+</p>
+
+<p>
+Her kommer et eksempel, som både plotter vores tidligere kendte dataserier over kaffetemperaturer sammen med forskellige funktioner.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> csv
+<span class="linenr"> 2: </span><span style="color: #b6a0ff;">import</span> matplotlib.pyplot <span style="color: #b6a0ff;">as</span> plt
+<span class="linenr"> 3: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="color: #989898;"># </span><span style="color: #989898;">Standard sympy</span>
+<span class="linenr"> 6: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span><span style="color: #989898;"># </span><span style="color: #989898;">Denne funktion kender I fra sympyeksemplet fra tidligere</span>
+<span class="linenr">10: </span><span style="color: #b6a0ff;">def</span> <span style="color: #feacd0;">flyt_sp_plot_til_ax</span><span style="color: #ffffff;">(</span>sp_plot, ax<span style="color: #ffffff;">)</span>:
+<span class="linenr">11: </span>    <span style="color: #9ac8e0;">"""Denne funktion tager et sympy-plot og en matplotlib ax som parameter,</span>
+<span class="linenr">12: </span><span style="color: #9ac8e0;">    og s&#248;rger for at inds&#230;tte sympy-plottet i det allerede eksisterende ax."""</span>
+<span class="linenr">13: </span>    <span style="color: #00d3d0;">backend</span> = sp_plot.backend<span style="color: #ffffff;">(</span>sp_plot<span style="color: #ffffff;">)</span>
+<span class="linenr">14: </span>    backend.<span style="color: #00d3d0;">ax</span> = ax
+<span class="linenr">15: </span>    backend._process_series<span style="color: #ffffff;">(</span>backend.parent._series, ax, backend.parent<span style="color: #ffffff;">)</span>
+<span class="linenr">16: </span>    backend.ax.spines<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"right"</span><span style="color: #ffffff;">]</span>.set_color<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"none"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">17: </span>    backend.ax.spines<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"bottom"</span><span style="color: #ffffff;">]</span>.set_position<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"zero"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">18: </span>    backend.ax.spines<span style="color: #ffffff;">[</span><span style="color: #79a8ff;">"top"</span><span style="color: #ffffff;">]</span>.set_color<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"none"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">19: </span>    plt.close<span style="color: #ffffff;">(</span>backend.fig<span style="color: #ffffff;">)</span>
+<span class="linenr">20: </span>
+<span class="linenr">21: </span>
+<span class="linenr">22: </span><span style="color: #989898;"># </span><span style="color: #989898;">Dette kender n&#230;sten fra tidligere fra matplotlibeksemplerne</span>
+<span class="linenr">23: </span><span style="color: #00d3d0;">kaffedata</span> = <span style="color: #ffffff;">[</span><span style="color: #ff66ff;">[]</span>, <span style="color: #ff66ff;">[]</span><span style="color: #ffffff;">]</span>
+<span class="linenr">24: </span><span style="color: #b6a0ff;">with</span> <span style="color: #f78fe7;">open</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Afkoeling_af_kaffe_nul_grader_udenfor.csv"</span><span style="color: #ffffff;">)</span> <span style="color: #b6a0ff;">as</span> datafil:
+<span class="linenr">25: </span>    <span style="color: #00d3d0;">csv_laeser</span> = csv.reader<span style="color: #ffffff;">(</span>datafil, delimiter=<span style="color: #79a8ff;">","</span><span style="color: #ffffff;">)</span>
+<span class="linenr">26: </span>    <span style="color: #f78fe7;">next</span><span style="color: #ffffff;">(</span>csv_laeser<span style="color: #ffffff;">)</span>  <span style="color: #989898;"># </span><span style="color: #989898;">Springer f&#248;rste linje over</span>
+<span class="linenr">27: </span>    <span style="color: #b6a0ff;">for</span> linje <span style="color: #b6a0ff;">in</span> csv_laeser:
+<span class="linenr">28: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">P&#229; h&#248;jre side af lighedstegnet anvendes en list comprehension</span>
+<span class="linenr">29: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">hvor hvert element omdannes til float</span>
+<span class="linenr">30: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">P&#229; venstre side udpakkes den nye liste til variablerne tid og temperatur</span>
+<span class="linenr">31: </span>        <span style="color: #00d3d0;">tid</span>, <span style="color: #00d3d0;">temperatur</span> = <span style="color: #ffffff;">(</span><span style="color: #f78fe7;">float</span><span style="color: #ff66ff;">(</span>element<span style="color: #ff66ff;">)</span> <span style="color: #b6a0ff;">for</span> element <span style="color: #b6a0ff;">in</span> linje<span style="color: #ffffff;">)</span>
+<span class="linenr">32: </span>
+<span class="linenr">33: </span>        <span style="color: #989898;"># </span><span style="color: #989898;">Tid og temperatur tilf&#248;jes til listerne tider og temperaturer</span>
+<span class="linenr">34: </span>        kaffedata<span style="color: #ffffff;">[</span>0<span style="color: #ffffff;">]</span>.append<span style="color: #ffffff;">(</span>tid<span style="color: #ffffff;">)</span>
+<span class="linenr">35: </span>        kaffedata<span style="color: #ffffff;">[</span>1<span style="color: #ffffff;">]</span>.append<span style="color: #ffffff;">(</span>temperatur<span style="color: #ffffff;">)</span>
+<span class="linenr">36: </span>
+<span class="linenr">37: </span><span style="color: #989898;"># </span><span style="color: #989898;">Standard fra matplotlib</span>
+<span class="linenr">38: </span><span style="color: #00d3d0;">fig</span>, <span style="color: #00d3d0;">ax</span> = plt.subplots<span style="color: #ffffff;">(</span>layout=<span style="color: #79a8ff;">"constrained"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">39: </span>
+<span class="linenr">40: </span><span style="color: #989898;"># </span><span style="color: #989898;">Lidt forskellige funktioner som alle skal plottes</span>
+<span class="linenr">41: </span><span style="color: #00d3d0;">funktioner</span> = <span style="color: #ffffff;">[</span>0.1 * <span style="color: #ff66ff;">(</span>x - 100<span style="color: #ff66ff;">)</span> ** i + 10 * i <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span><span style="color: #ff66ff;">(</span>1, 5<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">]</span>
+<span class="linenr">42: </span>
+<span class="linenr">43: </span><span style="color: #b6a0ff;">for</span> funktion <span style="color: #b6a0ff;">in</span> funktioner:
+<span class="linenr">44: </span>    <span style="color: #00d3d0;">plot</span> = sp.plot<span style="color: #ffffff;">(</span>funktion, <span style="color: #ff66ff;">(</span>x, 0, 180<span style="color: #ff66ff;">)</span>, legend=<span style="color: #00bcff;">True</span>, show=<span style="color: #00bcff;">False</span><span style="color: #ffffff;">)</span>
+<span class="linenr">45: </span>    flyt_sp_plot_til_ax<span style="color: #ffffff;">(</span>plot, ax<span style="color: #ffffff;">)</span>
+<span class="linenr">46: </span>
+<span class="linenr">47: </span>
+<span class="linenr">48: </span><span style="color: #989898;"># </span><span style="color: #989898;">Plotter kaffedata</span>
+<span class="linenr">49: </span>ax.plot<span style="color: #ffffff;">(</span>*kaffedata, <span style="color: #79a8ff;">"."</span>, label=<span style="color: #79a8ff;">"Kaffetemperatur"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">50: </span>
+<span class="linenr">51: </span>
+<span class="linenr">52: </span><span style="color: #989898;"># </span><span style="color: #989898;">Laver en ekstra dataserie og plotter den</span>
+<span class="linenr">53: </span><span style="color: #00d3d0;">ekstra_dataserie</span> = <span style="color: #ffffff;">[</span><span style="color: #f78fe7;">range</span><span style="color: #ff66ff;">(</span>0, 180, 10<span style="color: #ff66ff;">)</span>, <span style="color: #ff66ff;">[</span>10 * 1.01**i <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span><span style="color: #00eff0;">(</span>0, 180, 10<span style="color: #00eff0;">)</span><span style="color: #ff66ff;">]</span><span style="color: #ffffff;">]</span>
+<span class="linenr">54: </span>ax.plot<span style="color: #ffffff;">(</span>*ekstra_dataserie, <span style="color: #79a8ff;">"go"</span>, label=<span style="color: #79a8ff;">"Ekstra dataserie"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">55: </span>
+<span class="linenr">56: </span>
+<span class="linenr">57: </span><span style="color: #989898;"># </span><span style="color: #989898;">Vil gerne pege p&#229; et helt specielt punkt</span>
+<span class="linenr">58: </span><span style="color: #00d3d0;">specielt_punkt</span> = <span style="color: #ffffff;">(</span>40, 60<span style="color: #ffffff;">)</span>
+<span class="linenr">59: </span>ax.annotate<span style="color: #ffffff;">(</span>
+<span class="linenr">60: </span>    f<span style="color: #79a8ff;">"Her er det helt specielle punkt </span>{specielt_punkt}<span style="color: #79a8ff;">"</span>,
+<span class="linenr">61: </span>    specielt_punkt,
+<span class="linenr">62: </span>    xytext=<span style="color: #ff66ff;">(</span>20, 70<span style="color: #ff66ff;">)</span>,
+<span class="linenr">63: </span>    arrowprops=<span style="color: #ff66ff;">{</span><span style="color: #79a8ff;">"arrowstyle"</span>: <span style="color: #79a8ff;">"-&gt;"</span>, <span style="color: #79a8ff;">"lw"</span>: 1<span style="color: #ff66ff;">}</span>,
+<span class="linenr">64: </span><span style="color: #ffffff;">)</span>
+<span class="linenr">65: </span>
+<span class="linenr">66: </span><span style="color: #989898;"># </span><span style="color: #989898;">Standard matplotlib</span>
+<span class="linenr">67: </span>ax.set_title<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"En blanding af det hele."</span><span style="color: #ffffff;">)</span>
+<span class="linenr">68: </span>ax.set_xlabel<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Tid [min]"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">69: </span>ax.set_ylabel<span style="color: #ffffff;">(</span>r<span style="color: #79a8ff;">"Temperatur [${}^\circ C$]"</span><span style="color: #ffffff;">)</span>
+<span class="linenr">70: </span>ax.set_xlim<span style="color: #ffffff;">(</span>0, 180<span style="color: #ffffff;">)</span>
+<span class="linenr">71: </span>ax.set_ylim<span style="color: #ffffff;">(</span>-10, 120<span style="color: #ffffff;">)</span>
+<span class="linenr">72: </span>ax.legend<span style="color: #ffffff;">()</span>
+<span class="linenr">73: </span>plt.show<span style="color: #ffffff;">()</span>
+</pre>
+</div>
+
+
+<div id="orgcde9b3f" class="figure">
+<p><img src="./img/sympy_og_matplotlib_avanceret_eksempel.png" alt="sympy_og_matplotlib_avanceret_eksempel.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org7c9ed75" class="outline-3">
+<h3 id="org7c9ed75">Opgave</h3>
+<div class="outline-text-3" id="text-org7c9ed75">
+<p>
+Forsøg at skabe jeres eget plot vha. sympy, som ligner dette. Det behøver ikke at være fuldstændig identisk.
+</p>
+
+
+<div id="org69ef612" class="figure">
+<p><img src="./img/opgave_plot_sympy.png" alt="opgave_plot_sympy.png" />
+</p>
+</div>
+
+<p>
+Funktionen har forskriften
+</p>
+
+<p>
+\[f(x)= -0.5x - \sin \left( 0.6 x \right) + 6\,.\]
+</p>
+
+<p>
+Punkterne har følgende koordinater:
+</p>
+
+<ul class="org-ul">
+<li>\(A = (0,6)\)</li>
+<li>\(B = (5, 3.36)\)</li>
+<li>\(C = (7, 3.37)\)</li>
+<li>\(D = (11.18, 0)\)</li>
+</ul>
+
+
+<p>
+Husk at I kan finde flere oplysninger om brugen af plottefunktionen i sympy her: <a href="https://docs.sympy.org/latest/modules/plotting.html">https://docs.sympy.org/latest/modules/plotting.html</a>
+</p>
+
+<p>
+Ellers kan I tage udgangspunkt i eksemplerne.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org3d198b2" class="outline-2">
+<h2 id="org3d198b2">Fra streng til udtryk</h2>
+<div class="outline-text-2" id="text-org3d198b2">
+<p>
+Hvad kan man gøre, hvis man gerne vil have en matematisk funktion, som input fra brugeren eller måske læse den fra en tekststreng?
+</p>
+
+<p>
+Jo, den sikreste måde at gøre det på er ved at anvende funktionen <code>parse_expr</code> fra <code>sympy.parsing.sympy_parser</code>. Denne funktion er i stand til at omdanne en almindelig tekststreng til et <code>sympy</code>-udtryk samtidig med, at der udføres en række tjek af strengen, så man ikke kommer til at køre ondsindet kode. Sympy foreslår selv først funktionen <code>sympify</code>, som noget enklere omdanner en tekststreng til et <code>sympy</code>-udtryk. Problemet med denne funktion er dog, at den anvender <code>eval</code>, som uden videre omdanner tekststrenge til pythonkode og kører det. I sådanne tilfælde skal man være helt sikker på, at man kan stole på at en eventuel bruger, kun skriver faktisk anvendelige funktioner, som tekststreng og ikke begynder at skrive ondsindet kode i stedet for.
+</p>
+
+<p>
+Her kan I se et meget simpelt program som kan plotte brugerdefineret funktion i et brugerdefineret interval på x-aksen. Det er anvendelsen af <code>parse_expr</code>, som er den relevante del i eksemplet.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span class="linenr"> 1: </span><span style="color: #b6a0ff;">import</span> sympy <span style="color: #b6a0ff;">as</span> sp
+<span class="linenr"> 2: </span><span style="color: #b6a0ff;">from</span> sympy.parsing.sympy_parser <span style="color: #b6a0ff;">import</span> parse_expr
+<span class="linenr"> 3: </span>
+<span class="linenr"> 4: </span><span style="color: #00d3d0;">x</span> = sp.Symbol<span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"x"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 5: </span>
+<span class="linenr"> 6: </span><span style="color: #f78fe7;">print</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Velkommen til funktionsplotteren!"</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 7: </span><span style="color: #00d3d0;">funktionsstreng</span> = <span style="color: #f78fe7;">input</span><span style="color: #ffffff;">(</span><span style="color: #79a8ff;">"Skriv den funktion, som du gerne vil plotte. Husk at opl&#248;ftet hedder **, og at x er den uafh&#230;ngige variabel&gt; "</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 8: </span><span style="color: #00d3d0;">minimum</span> = <span style="color: #f78fe7;">float</span><span style="color: #ffffff;">(</span><span style="color: #f78fe7;">input</span><span style="color: #ff66ff;">(</span><span style="color: #79a8ff;">"Indtast den nedre gr&#230;nse for plottet p&#229; x-aksen&gt; "</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr"> 9: </span><span style="color: #00d3d0;">maximum</span> = <span style="color: #f78fe7;">float</span><span style="color: #ffffff;">(</span><span style="color: #f78fe7;">input</span><span style="color: #ff66ff;">(</span><span style="color: #79a8ff;">"Indtast den &#248;vre gr&#230;nse for plottet p&#229; x-aksen&gt; "</span><span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+<span class="linenr">10: </span><span style="color: #00d3d0;">funktion</span> = parse_expr<span style="color: #ffffff;">(</span>funktionsstreng<span style="color: #ffffff;">)</span>
+<span class="linenr">11: </span>sp.plot<span style="color: #ffffff;">(</span>funktion, <span style="color: #ff66ff;">(</span>x, minimum, maximum<span style="color: #ff66ff;">)</span><span style="color: #ffffff;">)</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgb6f6bcb" class="outline-3">
+<h3 id="orgb6f6bcb">Opgave</h3>
+<div class="outline-text-3" id="text-orgb6f6bcb">
+<p>
+Skriv jeres eget program, som spørger brugeren ind til en <b>ligning</b>, eller måske et ligningssystem, som <code>sympy</code> så kan løse. Brug jeres viden fra de tidligere eksempler med <code>sympy</code>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org426c2b9" class="outline-2">
+<h2 id="org426c2b9">Løsning af matematikopgave</h2>
+<div class="outline-text-2" id="text-org426c2b9">
+<p>
+Som den endelige prøve på jeres færdigheder inden for brugen af <code>sympy</code>, skal I løse følgende matematikopgaver vha netop <code>sympy</code>.
+</p>
+
+
+<div id="org649826b" class="figure">
+<p><img src="./img/matematikopgave.png" alt="matematikopgave.png" />
+</p>
+</div>
+
+<p>
+I kan finde bilaget med hårdhed her: <a href="./Bilag_Haardhed.csv">Bilag_Haardhed.csv</a>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Forfatter: Jacob Debel</p>
+<p class="date">Created: 2023-09-13 ons 22:55</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

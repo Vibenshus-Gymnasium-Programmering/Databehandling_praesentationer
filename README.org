@@ -1,4 +1,4 @@
-Dette repo indeholder en række præsentationer omkring *databehandling og plot af data* udviklet vha bibliotekerne =csv=, =pandas= og =matplotlib=. Man kan finde de enkelte præsentationer i de forskellige mapper og så vælge org-filen, eller man kan klikke på linkene nedenfor.
+Dette repo indeholder en række præsentationer omkring *databehandling og plot af data* udviklet vha bibliotekerne =csv=, =pandas=, =matplotlib= og =sympy=. Man kan finde de enkelte præsentationer i de forskellige mapper og så vælge org-filen, eller man kan klikke på linkene nedenfor.
 
 Indtil videre er der følgende præsentationer:
 
@@ -6,3 +6,4 @@ Indtil videre er der følgende præsentationer:
 - [[./01_Indlaesning_af_data/01_Indlaesning_af_data_csv_pandas.org][Indlæsning af data med csv og pandas]]
 - [[./02_Plot_af_data/02_Plot_af_data_introduktion.org][Introduktion til plot af data]]
 - [[./02_Plot_af_data/02_Plot_af_data_matplotlib.org][Plot af data med matplotlib]]
+- [[./03_Sympy/Introduktion_til_sympy.org][Introduktion til sympy]]
