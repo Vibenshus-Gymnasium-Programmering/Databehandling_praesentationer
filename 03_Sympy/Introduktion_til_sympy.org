@@ -559,11 +559,11 @@ Her er resultatet af differentiationen:
 I skal nu finde de afledte funktioner til følgende funktioner vha sympy. Se om I ikke kan finde alle tre afledte funktioner i ét skript.
 
 $$
-\begin{aligned}
+\begin{eqnarray}
 f(x) &= &\left( 8x^4+4 \right)\cdot \left( 3x^3-2x+7 \right) \\
 g(x) &= &\frac{-3x^2-5x-6}{x-7}  \\
 h(x) &= &\sqrt{9x} - \frac{4}{x}
-\end{aligned}
+\end{eqnarray}
 $$
 
 ** Integralregning
