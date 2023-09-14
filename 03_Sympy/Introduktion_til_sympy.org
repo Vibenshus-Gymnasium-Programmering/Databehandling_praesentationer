@@ -651,7 +651,7 @@ sp.pprint(bestemt_integral.doit().evalf(4))
 *** Opgaver
 Udfør følgende ubestemte integraler (altså find stamfunktionerne) vha sympy. $e^x$ kan skrives som =sp.exp(x)= i sympy, mens eulers tal $e=2.71\dots$ kan skrives som =sp.E=.
 
-$$\int 3 x^{-8} - \frac{1}{x}+8 \,dx$$
+$$\int 3 x^\{-8\} - \frac{1}{x}+8 \,dx$$
 
 $$\int e^x - x^e \,dx$$
 
