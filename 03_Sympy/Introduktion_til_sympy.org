@@ -3,7 +3,8 @@
 
 En test
 
-$$\int_{-10}^{10} x dx$$
+
+$$`\int_{-10}^{10} x dx`$$
 
 * Introduktion
 [[./img/sympy_logo.png]]
