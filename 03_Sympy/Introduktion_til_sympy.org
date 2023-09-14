@@ -270,19 +270,23 @@ nu er det jeres tur. I skal løse følgende opgaver vha sympy. I må gerne løse
 
 Saml følgende udtryk på en brøkstreg:
 
-1. $\frac{5}{(-7)}- 2/(3+a)$
-2. $\frac{\frac{4a}{b}}{\frac{b}{c}}$
+$$\frac{5}{(-7)}- 2/(3+a)$$
+
+$$\frac{\frac{4a}{b}}{\frac{b}{c}}$$
 
 Ophæv følgende parenteser:
 
-3. $(5b+a)^2$
-4. $\left( 1+ \frac{a}{b} \right) \left( 1 + a \right)$
-5. $\left( \frac{b}{a}- \frac{a}{b} \right)^2$
+$$(5b+a)^2$$
+
+$$\left( 1+ \frac{a}{b} \right) \left( 1 + a \right)$$
+
+$$\left( \frac{b}{a}- \frac{a}{b} \right)^2$$
 
 Udvid følgende logaritmeudtryk:
 
-6. $log \left( x\cdot y \right)$
-7. $log \left( \frac{3 \cdot x^{1.5}}{y} \right)$
+$$\log \left( x\cdot y \right)$$
+
+$$\log \left( \frac{3 \cdot x^{1.5}}{y} \right)$$
 * Løsning af ligninger
 I matematiske fag anvender lighedstegnet (=) til at opbygge ligninger. I programmering og dermed også i python anvendes lighedstegnet som tildelingsoperator, altså til f.eks. at oprette variable ~a = 3~. Af den grund kan man ikke anvende lighedstegnet, når man skal oprette ligninger i sympy.
 
