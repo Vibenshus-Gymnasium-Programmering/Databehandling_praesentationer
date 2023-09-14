@@ -6,6 +6,8 @@ En test
 
 $\`\int_{-10}^{10} x dx\`$
 
+$$\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)$$
+
 * Introduktion
 [[./img/sympy_logo.png]]
 
