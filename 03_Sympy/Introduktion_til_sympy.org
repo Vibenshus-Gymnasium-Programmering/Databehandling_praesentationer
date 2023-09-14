@@ -286,7 +286,7 @@ Udvid følgende logaritmeudtryk:
 
 $$\log \left( x\cdot y \right)$$
 
-$$\log \left( \frac{3 \cdot x^{1.5} }{y} \right)$$
+$$\log \left( \frac{3 \cdot x^1 {}^. {}^5}{y} \right)$$
 * Løsning af ligninger
 I matematiske fag anvender lighedstegnet (=) til at opbygge ligninger. I programmering og dermed også i python anvendes lighedstegnet som tildelingsoperator, altså til f.eks. at oprette variable ~a = 3~. Af den grund kan man ikke anvende lighedstegnet, når man skal oprette ligninger i sympy.
 
@@ -664,7 +664,7 @@ Udfør følgende bestemte integraler (altså find arealet under kurven).
 
 Bestem $a$ i følgende ligning:
 
-$$\int_{-a}^{10} x^a \,dx = 1$$
+$$\int\_{-a}^{10} x^a \,dx = 1$$
 
 Hint til udfordringen: I skal anvende både integration og løsning af ligninger.
 
