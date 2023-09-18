@@ -1,3 +1,7 @@
 /.venv/
 /00_Introduktion_til_datasaet/00_Introduktion.html
 /02_Plot_af_data/02_Plot_af_data.html
+/.direnv/
+/.envrc
+/01_Indlaesning_af_data/world-cup-2022/
+/03_Sympy/ltximg/
