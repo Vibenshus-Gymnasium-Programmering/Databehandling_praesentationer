@@ -365,7 +365,7 @@ Af eksempler kan nævnes
 - $e^x = x+2$
 - $\cos(x) = \frac{1}{4}x$
 
-For at kunne løse ligninger numerisk skal man anvende =sp.nsolve()=. Man skal være obmærksom på, at man skal give et /gæt/ som ekstra argument til =sp.nsolve()=. For at kunne gøre dette, hjælper det at plotte de to sider af ligningerne som hver deres funktioner, og så se, hvor de to funktioner skærer hinanden. I det følgende kan I se, hvordan man kan løse ligningen
+For at kunne løse ligninger numerisk skal man anvende =sp.nsolve()=. Man skal være opmærksom på, at man skal give et /gæt/ som ekstra argument til =sp.nsolve()=. For at kunne gøre dette, hjælper det at plotte de to sider af ligningerne som hver deres funktioner, og så se, hvor de to funktioner skærer hinanden. I det følgende kan I se, hvordan man kan løse ligningen
 
 $$e^x = x+2\,.$$
 
