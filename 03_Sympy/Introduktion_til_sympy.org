@@ -411,7 +411,7 @@ sp.pprint(loesninger)
 [-1.84140566043696, 1.14619322062058]
 #+end_example
 
-For at gøre scriptet endnu kortere kan man også anvende list comprehensions til. Det kan se nogenlunde således ud:
+For at gøre scriptet endnu kortere kan man også anvende list comprehensions. Det kan se nogenlunde således ud:
 
 #+begin_src python -n :exports both :results output :eval never-export :comments link :tangle sympy_numeriske_loesninger_03.py
 import sympy as sp
@@ -672,7 +672,7 @@ Bestem $a$ i følgende ligning:
 
 Hint til udfordringen: I skal anvende både integration og løsning af ligninger.
 
-# Løsningen er a = 1.5
+# Løsningen er a = - 1.5
 
 * Plot af grafer
 Sympy har sit eget plotte-modul, som kan anvende forskellige backends herunder =matplotlib=. Vi har tidligere arbejdet med =matplotlib=, så vi tager udgangspunkt i det. Sørg derfor for at have =matplotlib= installeret i samme virtuelle miljø som =sympy=.
